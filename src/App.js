@@ -18,6 +18,7 @@ const Wrapper=styled.div`
   height: fit-content;
   min-height: 100vh;
   margin:0 auto;
+  font-family: 'Noto Sans KR', sans-serif;
 `;
 
 export default App;
