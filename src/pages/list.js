@@ -1,7 +1,20 @@
 import React from "react";
 import styled from "styled-components";
+import axios from "axios";
 
 export default function List(){
+
+  const getFullList=async()=>{
+    console.log("get all list");
+    const data = await axios.get('https://ewha-plate.herokuapp.com/list/all')
+    .then((res)=>{
+      console.log(res);
+    }).catch((err)=>{
+      console.log(err);
+    });
+    console.log(data);
+  }
+
   return(
     <Wrapper>
       <header>
