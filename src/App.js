@@ -3,13 +3,18 @@ import styled from "styled-components";
 
 import Router from "./Router";
 import {Footer} from "./components";
+import {LocationProvider,FoodTypeProvider} from "./EwhaContext";
 
 function App() {
   return (
+    <LocationProvider>
+    <FoodTypeProvider> 
     <Wrapper>
       <Router/>
       <Footer/>
     </Wrapper>
+    </FoodTypeProvider>
+    </LocationProvider>
   );
 }
 
