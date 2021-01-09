@@ -6,6 +6,7 @@ export default function Intro({history}){
     history.push("/location");
   }
   return(
+
     <Wrapper>
       <Title>서비스 타이틀</Title>
       <Content>
@@ -14,6 +15,7 @@ export default function Intro({history}){
       </Content>
       <StartButton onClick={handleStartButton}>시작하기</StartButton>
       </Wrapper>
+    
   )
 }
 
@@ -23,6 +25,7 @@ const Wrapper=styled.div`
   justify-content:center;
   align-items:center;
   width:100%;
+  height:100vh;
 `;
 const Title=styled.h2``;
 const Content=styled.div`
@@ -36,6 +39,7 @@ const StartButton=styled.button`
   font-size:1rem;
   border: 3px solid #00462A;
   border-radius:1rem;
+  outline:none;
   color: white;
   background-color:#00462A;
   cursor: pointer;

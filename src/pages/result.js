@@ -21,20 +21,25 @@ const Wrapper=styled.div`
   justify-content:center;
   align-items:center;
   width:100%;
+  height:100vh;
 `;
 
 const Content=styled.h2``;
-const Img=styled.div``;
+const Img=styled.div`
+  width:14rem;
+  height:14rem;
+  border:1px solid gray;`;
 const Detail=styled.div`
   margin-bottom:2rem;`;
 
 const ButtonGroup=styled.div`
+  width:90%;
   display:flex;
-  justify-content:space-between; 
+  justify-content:space-evenly; 
  `;
 
 const Button=styled.button`
-  width:9rem;
+  width:8rem;
   height:2.5rem;
   font-size:1rem;
   border: 3px solid #00462A;
