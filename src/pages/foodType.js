@@ -128,4 +128,5 @@ const Button=styled.button`
   cursor: pointer;
   outline:none;
   font-family: 'Noto Sans KR', sans-serif;
+  transition: box-shadow 0.2s ease-in-out;
 `;
