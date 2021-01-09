@@ -1,12 +1,45 @@
-import React from "react";
+import React,{useContext,useState,useEffect} from "react";
 import styled from "styled-components";
+import axios from "axios";
+
+import {FoodTypeContext,LocationContext} from "../EwhaContext";
 
 export default function Result({history}){
+
+  const [location,setLocation]=useContext(LocationContext);
+  const [foodType,setFoodType]=useContext(FoodTypeContext);
+  const [list,setList]=useState({name:"",address:"",phone:"",imgURL:""});
+
+  useEffect(()=>{
+    getRandom();
+  },[]);
+
+  const getRandom=async()=>{
+    await axios.post("https://ewha-plate.herokuapp.com/random",{
+      "categories":foodType,
+      "ewhaType":location
+    },{
+      heaers:{
+      'Content-Type': 'application/json'
+    }
+  }).then(
+    ({data})=>{
+      console.log(data);
+      setList({...list,
+        name:data.name,
+        address:data.address,
+        phone:data.phone,
+        imgURL:data.imageUrl});
+    }
+    );
+    
+  }
   return(
     <Wrapper>
-      <Content>그럼 오늘은 ~~어때?</Content>
-      <Img>이미지</Img>
-      <Detail>상세 정보. 지도. 메뉴판 보기</Detail>
+      <Content>그럼 오늘은 {list.name}어때?</Content>
+      <Img src={list.imgURL} />
+      <Detail>{list.address}</Detail>
+      <Detail>{list.phone}</Detail>
       <ButtonGroup>
       <Button onClick={()=>{history.push("/result")}} >다시하기</Button>
       <Button onClick={()=>{history.push("/list")}} >전체리스트 보기</Button>
@@ -23,14 +56,14 @@ const Wrapper=styled.div`
   width:100%;
   height:100vh;
 `;
-
-const Content=styled.h2``;
-const Img=styled.div`
+const Content=styled.h3``;
+const Img=styled.img`
   width:14rem;
   height:14rem;
-  border:1px solid gray;`;
+  border:1px solid gray;
+  margin:1rem;`;
 const Detail=styled.div`
-  margin-bottom:2rem;`;
+  margin-bottom:1rem;`;
 
 const ButtonGroup=styled.div`
   width:90%;
@@ -39,9 +72,9 @@ const ButtonGroup=styled.div`
  `;
 
 const Button=styled.button`
-  width:8rem;
+  width:7rem;
   height:2.5rem;
-  font-size:1rem;
+  font-size:0.8rem;
   border: 3px solid #00462A;
   border-radius:1rem;
   margin-bottom:1rem;
