@@ -1,7 +1,11 @@
-import React,{useState} from "react";
+import React,{useContext, useState} from "react";
 import styled from "styled-components";
 
+import {FoodTypeContext} from "../EwhaContext";
+
 export default function FoodType({history}){
+
+  const[foodType,setFoodType]=useContext(FoodTypeContext);
 
   const [kor,setKor]=useState(false);
   const [school,setSchool]=useState(false);
@@ -10,15 +14,49 @@ export default function FoodType({history}){
   const [chi,setChi]=useState(false);
   const [fast,setFast]=useState(false);
 
+  const addFoodTypes=(foodType)=>{
+    setFoodType(prevFoodTypes=>[...prevFoodTypes,foodType]);
+  }
+
+  const deleteFoodTypes=(food)=>{
+    foodType.splice(foodType.indexOf(food),1);
+    setFoodType(foodType);
+  }
+
+  const checkFoodState=(state,setFunction,foodType)=>{
+
+    if(state){
+      setFunction(false);
+      deleteFoodTypes(foodType);
+    }
+    else{
+      setFunction(true);
+      addFoodTypes(foodType);
+    }
+  }
+  
   const handleButtonClick=(event)=>{
+
     const {target:{innerText}}=event;
 
-    if(innerText==="한식") kor ? setKor(false) : setKor(true);
-    else if(innerText==="분식") school ? setSchool(false) : setSchool(true);
-    else if(innerText==="양식 • 아시안") west ? setWest(false): setWest(true);
-    else if(innerText==="회 • 돈까스 • 일식") jap ? setJap(false): setJap(true);
-    else if(innerText==="중식") chi?setChi(false):setChi(true);
-    else if(innerText==="패스트푸드") fast ? setFast(false) : setFast(true);
+    if(innerText==="한식") {
+      checkFoodState(kor,setKor,"한식");
+    }
+    else if(innerText==="분식"){
+     checkFoodState(school,setSchool,"분식");
+    }
+    else if(innerText.substring(0,1)==="양"){
+      checkFoodState(west,setWest,"양식");
+    }
+    else if(innerText.substring(0,1)==="회"){
+      checkFoodState(jap,setJap,"일식");
+    }
+    else if(innerText==="중식"){
+      checkFoodState(chi,setChi,"중식");
+    }
+    else if(innerText==="패스트푸드"){
+      checkFoodState(fast,setFast,"패스트푸드");
+    }
   }
 
   const handleSubmit=()=>{
@@ -30,14 +68,14 @@ export default function FoodType({history}){
       <Question>
         <p style={{margin:"0"}}>먹고 싶은 건 모르겠고..</p>
         <p style={{margin:"0"}}>일단 이건 안땡기는 것 같아 🤔</p>
-        </Question>
+      </Question>
       <ButtonGroup>
-      <Button selected={kor} onClick={handleButtonClick} >한식</Button>
-      <Button selected={school} onClick={handleButtonClick} >분식</Button>
-      <Button selected={west} onClick={handleButtonClick} >양식 • 아시안</Button>
-      <Button selected={jap} onClick={handleButtonClick} >회 • 돈까스 • 일식</Button>
-      <Button selected={chi} onClick={handleButtonClick} >중식</Button>
-      <Button selected={fast} onClick={handleButtonClick} >패스트푸드</Button>
+        <Button selected={kor} onClick={handleButtonClick} >한식</Button>
+        <Button selected={school} onClick={handleButtonClick} >분식</Button>
+        <Button selected={west} onClick={handleButtonClick} >양식 • 아시안</Button>
+        <Button selected={jap} onClick={handleButtonClick} >회 • 돈까스 • 일식</Button>
+        <Button selected={chi} onClick={handleButtonClick} >중식</Button>
+        <Button selected={fast} onClick={handleButtonClick} >패스트푸드</Button>
       </ButtonGroup>
       <h3>다 골랐다면...?</h3>
       <ConfirmButton onClick={handleSubmit}>결과보기</ConfirmButton>
@@ -90,4 +128,4 @@ const Button=styled.button`
   cursor: pointer;
   outline:none;
   font-family: 'Noto Sans KR', sans-serif;
-  `;
+`;
