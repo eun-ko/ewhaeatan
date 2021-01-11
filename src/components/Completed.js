@@ -1,8 +1,9 @@
 import React from "react";
 import styled from "styled-components";
+import { withRouter } from 'react-router-dom';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 
-export default function Completed(){
+function Completed({history}){
   
   const url = window.location.href;
 
@@ -16,10 +17,11 @@ export default function Completed(){
       <i class="fas fa-comment-dots"></i>
       <CopyToClipboard text={url}><i class="fas fa-link"></i></CopyToClipboard>
       </Row>
-      <Button>처음으로</Button>
+      <Button onClick={()=>history.push("/")}>처음으로</Button>
     </Wrapper>
   )
 }
+export default withRouter(Completed);
 
 const Row=styled.div`
   display:flex;
