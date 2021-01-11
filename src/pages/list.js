@@ -2,7 +2,7 @@ import React,{useState,useEffect} from "react";
 import styled from "styled-components";
 import axios from "axios";
 
-import {Header,SearchBar} from "../components";
+import {SearchBar} from "../components";
 import {Loading} from "../components";
 
 export default function List({history}){
@@ -52,7 +52,7 @@ export default function List({history}){
     {!loading && 
     <>
       <Wrapper>
-        <HeaderWrapper><Header/></HeaderWrapper>
+        <FilterWrapper>
         <Filter>
           <FilterName>위치</FilterName>
           <Button>정문</Button>
@@ -69,9 +69,10 @@ export default function List({history}){
           <Button>패스트푸드</Button>
         </Filter>
         <SearchBar/>
+        </FilterWrapper>
         {list}
       </Wrapper>
-      <RButton onClick={handleRegisterButton}>+</RButton>
+      <FloatingButton onClick={handleRegisterButton}><i class="fas fa-pen"></i></FloatingButton>
     </>
     }
     </>
@@ -97,6 +98,16 @@ const HeaderWrapper=styled.div`
   position:sticky;
   z-index:100;
   top:0;
+  background-color:rgba(255,255,255,0.9);
+`;
+
+const FilterWrapper=styled.div`
+  padding:0.5rem 0;
+  width:100%;
+  position:sticky;
+  z-index:100;
+  top:0;
+  background-color:rgba(255,255,255,0.9);
 `;
 
 const Filter=styled.div`
@@ -147,10 +158,9 @@ const Button=styled.button`
   margin:0.1rem;
 `;
 
-const RButton=styled.button`
+const FloatingButton=styled.button`
   &:hover {
-    background-color: rgb(0, 80, 40);
-    border: 3px solid rgb(0, 80, 40);
+    opacity:0.75;
   }
   position:sticky;
   bottom:2rem;
@@ -161,9 +171,9 @@ const RButton=styled.button`
   justify-content:center;
   align-items:center;
   font-weight:600;
-  width:3rem;
-  height:3rem;
-  font-size:2rem;
+  width:3.3rem;
+  height:3.3rem;
+  font-size:1rem;
   border: 3px solid #00462A;
   border-radius:50%;
   margin-bottom:1rem;
