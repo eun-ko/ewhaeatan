@@ -10,12 +10,12 @@ export default function Footer(){
 }
 
 const Wrapper=styled.div`
-display:flex;
-box-sizing:border-box;
-padding:1rem;
-font-size:0.7rem;
-justify-content:flex-end;
-background-color:#f2f2f2;
-height:3rem;
-width:100%;
+  display:flex;
+  box-sizing:border-box;
+  padding:1rem;
+  font-size:0.6rem;
+  justify-content:flex-end;
+  background-color:#f2f2f2;
+  height:3rem;
+  width:100%;
 `;
