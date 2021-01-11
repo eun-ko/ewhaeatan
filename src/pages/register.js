@@ -4,11 +4,13 @@ import axios from "axios";
 
 import { Menu, Dropdown } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
+import {Completed,Loading} from "../components";
 
 export default function Register({history}){
 
   const [information,setInformation]=useState({name:"",location:"",foodType:""});
   const [registerd,setRegisterd]=useState(false);
+  const [loading,setLoading]=useState(false);
 
   const handleLocationDropDown=(e)=>{
     setInformation({...information,
@@ -30,6 +32,10 @@ export default function Register({history}){
   }
 
   const handleRegisterButton=async()=>{
+    console.log(information.name);
+    console.log(information.foodType);
+    console.log(information.location);
+    setLoading(true);
     await axios
     .post("https://ewha-plate.herokuapp.com/register",{
       "name":information.name,
@@ -42,7 +48,12 @@ export default function Register({history}){
     })
     .then(({data})=>{
       console.log(data.success);
-      data.success ? setRegisterd(true) : setRegisterd(false);
+      if(data.success){
+        setRegisterd(true);
+        setLoading(false);
+      }
+      else
+        setRegisterd(false);
     }
     )
   }
@@ -87,6 +98,10 @@ export default function Register({history}){
 
   return(
     <>
+    {loading && <Loading text="맛집 등록하는중..."/>}
+    {!loading &&
+    <>
+    {registerd && <CWrapper><Completed/></CWrapper>}
     {!registerd && 
       <Wrapper>
       <Header>
@@ -120,7 +135,9 @@ export default function Register({history}){
         </Content>
       </Form>
     </Wrapper>}
+    </>}
     </>
+
     )
 }
 
@@ -190,4 +207,12 @@ const Wrapper=styled.div`
   justify-content:center;
   align-items:center;
   width:100%;
+`;
+
+const CWrapper=styled.div`
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  width:100%;
+  height:90vh;
 `;
