@@ -24,7 +24,6 @@ const Wrapper=styled.div`
   justify-content:space-between;
   width: 100%;
   max-width: 26rem;
-  height:100vh;
   min-height: 100vh;
   margin:0 auto;
   font-family: 'Noto Sans KR', sans-serif;
