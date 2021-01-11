@@ -6,7 +6,6 @@ export default function Intro({history}){
     history.push("/location");
   }
   return(
-
     <Wrapper>
       <Title>서비스 타이틀</Title>
       <Content>
