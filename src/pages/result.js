@@ -3,12 +3,15 @@ import styled from "styled-components";
 import axios from "axios";
 
 import {FoodTypeContext,LocationContext} from "../EwhaContext";
+import {Loading} from "../components";
 
 export default function Result({history}){
 
   const [location,setLocation]=useContext(LocationContext);
   const [foodType,setFoodType]=useContext(FoodTypeContext);
+
   const [list,setList]=useState({name:"",address:"",phone:"",imgURL:""});
+  const [loading,setLoading]=useState(true);
 
   useEffect(()=>{
     getRandom();
@@ -19,7 +22,7 @@ export default function Result({history}){
       "categories":foodType,
       "ewhaType":location
     },{
-      heaers:{
+      headers:{
       'Content-Type': 'application/json'
     }
   }).then(
@@ -30,13 +33,16 @@ export default function Result({history}){
         address:data.address,
         phone:data.phone,
         imgURL:data.imageUrl});
+      setLoading(false);
     }
     );
     
   }
   return(
-    <Wrapper>
-      <Content>그럼 오늘은 {list.name}어때?</Content>
+    <>
+    {loading && <Loading text="결과 가져오는중..."/>}
+    {!loading && <Wrapper>
+      <Content>그럼 오늘은 {list.name} 어때?</Content>
       <Img src={list.imgURL} />
       <Detail>{list.address}</Detail>
       <Detail>{list.phone}</Detail>
@@ -44,7 +50,8 @@ export default function Result({history}){
       <Button onClick={()=>{history.push("/result")}} >다시하기</Button>
       <Button onClick={()=>{history.push("/list")}} >전체리스트 보기</Button>
       </ButtonGroup>
-    </Wrapper>
+    </Wrapper>}
+    </>
   )
 }
 
@@ -57,11 +64,13 @@ const Wrapper=styled.div`
   height:100vh;
 `;
 const Content=styled.h3``;
+
 const Img=styled.img`
   width:14rem;
   height:14rem;
   border:1px solid gray;
   margin:1rem;`;
+
 const Detail=styled.div`
   margin-bottom:1rem;`;
 
