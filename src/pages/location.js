@@ -26,7 +26,7 @@ export default function Location({history}){
       setLocation("신촌");
       setSinchonClicked(true);
     }
-    setTimeout(()=>{history.push("./foodtype");},1000);
+    setTimeout(()=>{history.push("./foodtype");},400);
 
   }
   return(
@@ -63,7 +63,7 @@ const Button=styled.button`
   width:80%;
   height:2.5rem;
   font-size:1rem;
-  border: 3px solid #00462A;
+  border: 0.2rem solid #00462A;
   border-radius:1rem;
   margin-bottom:1rem;
   color: ${props=>props.clicked ? "white" : "#00462A"};
