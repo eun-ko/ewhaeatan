@@ -3,10 +3,12 @@ import styled from "styled-components";
 import axios from "axios";
 
 import {Header,SearchBar} from "../components";
+import {Loading} from "../components";
 
-export default function List(){
+export default function List({history}){
 
   const [foodList,setFoodList]=useState([]);
+  const [loading,setLoading]=useState(true);
 
   useEffect(()=>{
     getFullList();
@@ -17,10 +19,15 @@ export default function List(){
     .then(({data})=>{
       console.log(data);
       setFoodList(data);
+      setLoading(false);
     })
     .catch((err)=>{
       console.log(err);
     });
+  }
+
+  const handleRegisterButton=()=>{
+    history.push("/register");
   }
 
   const list=foodList.map((food)=>{
@@ -39,29 +46,36 @@ export default function List(){
   });
 
   return(
+
     <>
-    <Wrapper>
-      <HeaderWrapper><Header/></HeaderWrapper>
-      <Filter>
-        <FilterName>위치</FilterName>
-        <Button>정문</Button>
-        <Button>후문</Button>
-        <Button>신촌</Button>
-      </Filter>
-      <Filter>
-        <FilterName>음식 종류</FilterName>
-        <Button>한식</Button>
-        <Button>분식</Button>
-        <Button>양식</Button>
-        <Button>일식</Button>
-        <Button>중식</Button>
-        <Button>패스트푸드</Button>
-      </Filter>
-      <SearchBar/>
-      {list}
-    </Wrapper>
-    <RButton>+</RButton>
+    {loading && <Loading text="전체 맛집 목록 가져오는중..."/>}
+    {!loading && 
+    <>
+      <Wrapper>
+        <HeaderWrapper><Header/></HeaderWrapper>
+        <Filter>
+          <FilterName>위치</FilterName>
+          <Button>정문</Button>
+          <Button>후문</Button>
+          <Button>신촌</Button>
+        </Filter>
+        <Filter>
+          <FilterName>음식 종류</FilterName>
+          <Button>한식</Button>
+          <Button>분식</Button>
+          <Button>양식</Button>
+          <Button>일식</Button>
+          <Button>중식</Button>
+          <Button>패스트푸드</Button>
+        </Filter>
+        <SearchBar/>
+        {list}
+      </Wrapper>
+      <RButton onClick={handleRegisterButton}>+</RButton>
     </>
+    }
+    </>
+    
   )
 }
 
