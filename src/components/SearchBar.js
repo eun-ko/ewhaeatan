@@ -1,7 +1,17 @@
-import React from "react";
+import React,{useState,useEffect} from "react";
 import styled from "styled-components";
 
-export default function SearchBar(){
+export default function SearchBar({setSearchKeyword}){
+
+  const [input,setInput]=useState();
+  
+  useEffect(()=>{
+    setSearchKeyword(input);
+  },[input]);
+
+  const handleInputChange=(e)=>{
+    setInput(e.target.value);
+  }
 
   const style={
     position:"absolute",
@@ -10,14 +20,14 @@ export default function SearchBar(){
   }
 
   return(
-    <Wrapper>
-      <Input placeholder="음식점 이름을 검색해보세요"></Input>
+    <SearchBarWrapper>
+      <Input onChange={handleInputChange} placeholder="음식점 이름을 검색해보세요"></Input>
       <i style={style} class="fas fa-search"></i>
-    </Wrapper>
+    </SearchBarWrapper>
   )
 }
 
-const Wrapper=styled.div`
+const SearchBarWrapper=styled.div`
   position:relative;
   display:flex;
   margin:0.6rem 0 0 1rem;
