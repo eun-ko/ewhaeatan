@@ -2,23 +2,33 @@ import React,{useState,useEffect} from "react";
 import styled from "styled-components";
 import axios from "axios";
 
-import {SearchBar} from "../components";
-import {Loading} from "../components";
+import {SearchBar,Loading,RestaurantList} from "../components";
 
 export default function List({history}){
 
-  const [foodList,setFoodList]=useState([]);
+  const [foodDetailList,setFoodDetailList]=useState([]);
   const [loading,setLoading]=useState(true);
+  const [searchKeyword,setSearchKeyword]=useState();
+  const [searchResult,setSearchResult]=useState([]);
 
   useEffect(()=>{
-    getFullList();
+    getFullList(); 
   },[]);
+
+  useEffect(()=>{
+    setSearchResult(filterBySearchKeyword(searchKeyword,foodDetailList));
+  },[searchKeyword]);
+
+  const handleRegisterButton=()=>{
+    history.push("/register");
+  }
 
   const getFullList=async()=>{
     await axios.get('https://ewha-plate.herokuapp.com/list/all')
     .then(({data})=>{
-      console.log(data);
-      setFoodList(data);
+      //console.log(data);
+      setFoodDetailList(data);
+      //setSearchResult(foodDetailList); 반영x ,RestaurantList.js에서 set
       setLoading(false);
     })
     .catch((err)=>{
@@ -26,24 +36,16 @@ export default function List({history}){
     });
   }
 
-  const handleRegisterButton=()=>{
-    history.push("/register");
+  const filterBySearchKeyword=(searchKeyword,foodDetailList)=>{
+    return foodDetailList.filter((foodDetail)=>{
+      if(foodDetail.name.includes(searchKeyword)){
+        return foodDetail;
+      }
+      else{
+        return null;
+      };
+    });
   }
-
-  const list=foodList.map((food)=>{
-    return (
-      <Contents key={food.id}>
-      <Img src={food.imageUrl}/>
-      <Column>
-        <h4 style={{margin:0}}>{food.name}</h4>
-        <Detail>{food.address}</Detail>
-        <Detail>{food.phone}</Detail>
-        <h5 style={{margin:0, marginTop:"0.8rem"}}>대표메뉴</h5>
-        <Detail>{food.menuList[0] && food.menuList[0].menuName} {food.menuList[0] && food.menuList[0].price}원</Detail>
-      </Column>
-    </Contents>
-    );
-  });
 
   return(
 
@@ -68,9 +70,9 @@ export default function List({history}){
           <Button>중식</Button>
           <Button>패스트푸드</Button>
         </Filter>
-        <SearchBar/>
         </FilterWrapper>
-        {list}
+        <SearchBar {...{setSearchKeyword}}/>
+        <RestaurantList {...{setSearchResult}} {...{searchResult}}/>
       </Wrapper>
       <FloatingButton onClick={handleRegisterButton}><i class="fas fa-pen"></i></FloatingButton>
     </>
@@ -119,32 +121,6 @@ const Filter=styled.div`
   margin-left:1rem;
 `;
 
-const Contents=styled.div`
-  display:flex;
-  justify-content:space-around;
-  width:99%;
-  padding:1rem 0.5rem;
-  box-sizing:border-box;
-  border-bottom:0.1rem solid rgba(0,0,0,0.07);
-  &:last-child {
-    margin-bottom:1rem;
-  }
-`;
-
-const Detail=styled.div`
-  font-size:0.9rem;
-`;
-
-const Column =styled.div`
-  display:flex;
-  flex-direction:column;
-  width:60%;
-  `;
-
-const Img=styled.img`
-  width:7rem;
-  height:7rem;`;
-
 const Button=styled.button`
   display:flex;
   justify-content:center;
@@ -154,6 +130,7 @@ const Button=styled.button`
   border-radius:0.8rem;
   background:none;
   cursor:pointer;
+  font-size:0.8rem;
   font-family: 'Noto Sans KR', sans-serif;
   margin:0.1rem;
 `;
@@ -161,10 +138,11 @@ const Button=styled.button`
 const FloatingButton=styled.button`
   &:hover {
     opacity:0.75;
+    box-shadow : 0rem 0rem 1.5rem 0rem rgba(0, 0, 0, 0.4);
   }
-  position:sticky;
-  bottom:2rem;
-  left:50rem;
+  position:fixed;
+  bottom:1.3rem;
+  right:1rem;
   margin-right:1rem;
   box-shadow : 0rem 0rem 1rem 0rem rgba(0, 0, 0, 0.2);
   display:flex;
