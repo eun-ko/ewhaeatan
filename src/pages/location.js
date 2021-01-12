@@ -43,7 +43,7 @@ export default function Location({history}){
 
 const Wrapper=styled.div`
   display:flex;
-  height:100vh;
+  height:90vh;
   flex-direction:column;
   justify-content:center;
   align-items:center;
