@@ -1,6 +1,6 @@
 import React from "react";
 import {BrowserRouter as Router, Route,Switch} from "react-router-dom";
-import {Intro,Location,FoodType,Result,List,Register,NotFound} from "./pages";
+import {Intro,Location,FoodType,Result,List,Register,NotFound} from "../pages";
 
 export default function Navigator() {
   return(

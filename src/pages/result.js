@@ -2,13 +2,13 @@ import React,{useContext,useState,useEffect} from "react";
 import styled from "styled-components";
 import axios from "axios";
 
-import {FoodTypeContext,LocationContext} from "../EwhaContext";
+import {FoodTypeContext,LocationContext} from "../services/EwhaContext";
 import {Loading} from "../components";
 
 export default function Result({history}){
 
-  const [location,setLocation]=useContext(LocationContext);
-  const [foodType,setFoodType]=useContext(FoodTypeContext);
+  const [location]=useContext(LocationContext);
+  const [foodType]=useContext(FoodTypeContext);
 
   const [list,setList]=useState({name:"",address:"",phone:"",imgURL:""});
   const [loading,setLoading]=useState(true);
@@ -40,9 +40,9 @@ export default function Result({history}){
   }
   return(
     <>
-    {loading && <Loading text="결과 가져오는중..."/>}
+    {loading && <Wrapper><Loading text="결과 가져오는중..."/></Wrapper>}
     {!loading && <Wrapper>
-      <Content>그럼 오늘은 {list.name} 어때?</Content>
+      <Content>그럼 오늘은 <strong>{list.name}</strong> 어때?</Content>
       <Img src={list.imgURL} />
       <Detail>{list.address}</Detail>
       <Detail>{list.phone}</Detail>
@@ -61,7 +61,7 @@ const Wrapper=styled.div`
   justify-content:center;
   align-items:center;
   width:100%;
-  height:100vh;
+  height:90vh;
 `;
 const Content=styled.h3``;
 

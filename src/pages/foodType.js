@@ -1,7 +1,7 @@
 import React,{useContext, useState} from "react";
 import styled from "styled-components";
 
-import {FoodTypeContext} from "../EwhaContext";
+import {FoodTypeContext} from "../services/EwhaContext";
 
 export default function FoodType({history}){
 
@@ -34,7 +34,6 @@ export default function FoodType({history}){
       addFoodTypes(foodType);
     }
   }
-  
   const handleButtonClick=(event)=>{
 
     const {target:{innerText}}=event;

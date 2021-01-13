@@ -1,9 +1,9 @@
-import Intro from "./intro";
-import Location from "./location";
-import FoodType from "./foodType";
-import Result from "./result";
-import List from "./list";
-import Register from "./register";
-import NotFound from "./notFound";
+import Intro from "./Intro";
+import Location from "./Location";
+import FoodType from "./FoodType";
+import Result from "./Result";
+import List from "./List";
+import Register from "./Register";
+import NotFound from "./NotFound";
 
 export {Intro,Location,FoodType,Result,List,Register,NotFound}
