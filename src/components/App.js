@@ -2,9 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import 'antd/dist/antd.css';
 
-import Router from "./Router";
-import {Footer} from "./components";
-import {LocationProvider,FoodTypeProvider} from "./EwhaContext";
+import Router from "../services/Router";
+import {Footer} from ".";
+import {LocationProvider,FoodTypeProvider} from "../services/EwhaContext";
 
 function App() {
   return (

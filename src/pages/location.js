@@ -1,11 +1,11 @@
 import React,{useContext,useState} from "react";
 import styled from "styled-components";
 
-import {LocationContext} from "../EwhaContext";
+import {LocationContext} from "../services/EwhaContext";
 
 export default function Location({history}){
 
-  const [location,setLocation]=useContext(LocationContext);
+  const [,setLocation]=useContext(LocationContext);
 
   const [front,setFrontClicked]=useState(false);
   const [back,setBackClicked]=useState(false);
