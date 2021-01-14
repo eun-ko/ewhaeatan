@@ -1,30 +1,28 @@
-import React,{useContext,useState} from "react";
+import React,{useContext} from "react";
 import styled from "styled-components";
 
 import {LocationContext} from "../services/EwhaContext";
 
 export default function Location({history}){
 
-  const [,setLocation]=useContext(LocationContext);
+  const [location,setLocation]=useContext(LocationContext);
 
-  const [front,setFrontClicked]=useState(false);
-  const [back,setBackClicked]=useState(false);
-  const [sinchon,setSinchonClicked]=useState(false);
+  const checkLocationSelected=(loc)=>{
+    if(location===loc) return true;
+    else return false;
+  }
 
   const handleButtonClick=(event)=>{
 
     const {target:{innerText}}=event;
     if(innerText.substring(0,1)==="정") {
       setLocation("정문"); 
-      setFrontClicked(true);
     }
     else if(innerText.substring(0,1)==="학"){
-      setLocation("후문");
-      setBackClicked(true);
+      setLocation("후문"); 
     } 
     else if(innerText.substring(0,1)==="신") {
-      setLocation("신촌");
-      setSinchonClicked(true);
+      setLocation("신촌"); 
     }
     setTimeout(()=>{history.push("./foodtype");},400);
 
@@ -33,9 +31,9 @@ export default function Location({history}){
     <Wrapper>
       <Question>지금 나의 위치는 ❓🧐</Question>
       <ButtonGroup>
-      <Button clicked={front} onClick={handleButtonClick} >정문쪽에서 수업끝났어</Button>
-      <Button clicked={back} onClick={handleButtonClick} >학관,교육관,공대야.. 후문 쪽으로 부탁해</Button>
-      <Button clicked={sinchon} onClick={handleButtonClick} >신촌까지 걸어가서 먹고 싶은걸?</Button>
+      <Button clicked={checkLocationSelected("정문")} onClick={handleButtonClick} >정문쪽에서 수업끝났어</Button>
+      <Button clicked={checkLocationSelected("후문")} onClick={handleButtonClick} >학관,교육관,공대야.. 후문 쪽으로 부탁해</Button>
+      <Button clicked={checkLocationSelected("신촌")} onClick={handleButtonClick} >신촌까지 걸어가서 먹고 싶은걸?</Button>
       </ButtonGroup>
     </Wrapper>
   )
