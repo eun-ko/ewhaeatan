@@ -1,11 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 
-export default function RestaurantList({searchResult,foodDetailList}){
+export default function RestaurantList({searchResult}){
 
-  //필터링 버튼 클릭 후, 서치바 input change 있어야지 업데이트됨
-  //foodDetailList로 하면 필터링은 바로 업데이트 되는데 검색결과 업데이트 x
-  const filteredList=searchResult && searchResult.map((restaurant)=>{
+  const restuarantList=searchResult && searchResult.map((restaurant)=>{
     return(
       <Contents key={restaurant.id}>
       <Img src={restaurant.imageUrl}/>
@@ -22,9 +20,9 @@ export default function RestaurantList({searchResult,foodDetailList}){
 
   
   return(
-  <>
-  {filteredList}
-  </>
+        <>
+          {restuarantList}
+        </>
   );
 }
 
@@ -52,4 +50,5 @@ const Column =styled.div`
 
 const Img=styled.img`
   width:7rem;
-  height:7rem;`;
+  height:7rem;
+  `;

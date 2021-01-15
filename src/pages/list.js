@@ -6,15 +6,18 @@ import {SearchBar,Loading,RestaurantList} from "../components";
 
 export default function List({history}){
 
-  const [foodDetailList,setFoodDetailList]=useState([]);
   const [loading,setLoading]=useState(true);
+
+  //for searched data
   const [searchKeyword,setSearchKeyword]=useState();
   const [searchResult,setSearchResult]=useState([]);
-  const [locationList,setLocationList]=useState([]);
-  const [foodTypeList,setFoodTypeList]=useState([]);
 
-  const [foodType,setFoodType]=useState({"kor":false,"school":false,"west":false,"jap":false,"chi":false,"fast":false});
-  const [location,setLoation]=useState({"front":false,"back":false,"sinchon":false});
+  //for filtered data
+  const [foodDetailList,setFoodDetailList]=useState([]);
+
+  /* array that stores filtered location/foodtype to send POST requests */
+  const [selectedLocationList,setSelectedLocationList]=useState([]);
+  const [selectedFoodTypeList,setSelectedFoodTypeList]=useState([]);
 
   useEffect(()=>{
     getFullListByGET(); //setFoodDetailList 
@@ -23,12 +26,11 @@ export default function List({history}){
 
   useEffect(()=>{
     setSearchResult(filterBySearchKeyword(searchKeyword,foodDetailList));
-  },[searchKeyword]); //foodDetailList도 dependency에 추가하면 searchResult.length가 처음 렌더링 후 0이 됨
+  },[searchKeyword]); 
 
   useEffect(()=>{
     getFilteredList();
-    console.log()
-  },[foodTypeList,locationList]);
+  },[selectedFoodTypeList,selectedLocationList]);
 
   const handleRegisterButton=()=>{
     history.push("/register");
@@ -43,6 +45,16 @@ export default function List({history}){
     .catch((err)=>{
       console.log(err);
     });
+  }
+
+  const checkFoodTypeSelected=(food)=>{
+    if(selectedFoodTypeList.includes(food)) return true;
+    else return false;
+  }
+
+  const checkLocationSelected=(location)=>{
+    if(selectedLocationList.includes(location)) return true;
+    else return false
   }
 
   const getAllListByPOST=async()=>{
@@ -75,16 +87,16 @@ export default function List({history}){
 
   const getFilteredList=async()=>{
     await axios.post('https://ewha-plate.herokuapp.com/list',{
-      "categories":foodTypeList,
-      "ewhaTypes":locationList
+      "categories":selectedFoodTypeList,
+      "ewhaTypes":selectedLocationList
     },{
       headers:{
       'Content-Type': 'application/json'
     }
   })
     .then(({data})=>{
-      console.log(data);
       setFoodDetailList(data);
+      setSearchResult(data);
     })
     .catch((err)=>{
       console.log(err);
@@ -92,109 +104,83 @@ export default function List({history}){
   }
 
   const addFoodTypes=(foodType)=>{
-    if(foodType==="한식") setFoodTypeList([...foodTypeList,foodType]);
-    else if(foodType==="분식") setFoodTypeList([...foodTypeList,foodType]);
-    else if(foodType==="양식") setFoodTypeList([...foodTypeList,foodType]);
-    else if(foodType==="일식") setFoodTypeList([...foodTypeList,foodType]);
-    else if(foodType==="중식") setFoodTypeList([...foodTypeList,foodType]);
-    else if(foodType==="패스트푸드") setFoodTypeList([...foodTypeList,foodType]);
+    setSelectedFoodTypeList([...selectedFoodTypeList,foodType]);
   }
 
   const deleteFoodTypes=(foodType)=>{
-    if(foodType==="한식") setFoodTypeList(foodTypeList.filter(food=>food!==foodType));
-    else if(foodType==="분식") setFoodTypeList(foodTypeList.filter(food=>food!==foodType));
-    else if(foodType==="양식") setFoodTypeList(foodTypeList.filter(food=>food!==foodType));
-    else if(foodType==="일식") setFoodTypeList(foodTypeList.filter(food=>food!==foodType));
-    else if(foodType==="중식") setFoodTypeList(foodTypeList.filter(food=>food!==foodType));
-    else if(foodType==="패스트푸드") setFoodTypeList(foodTypeList.filter(food=>food!==foodType));
+    setSelectedFoodTypeList(selectedFoodTypeList.filter(food=>food!==foodType));
   }
 
   const addLocation=(location)=>{
-    if(location==="정문") setLocationList([...locationList,location]);
-    else if(location==="후문") setLocationList([...locationList,location]);
-    else if(location==="신촌") setLocationList([...locationList,location]);
+    setSelectedLocationList([...selectedLocationList,location]);
   }
 
   const deleteLocation=(location)=>{
-    if(location==="정문") setLocationList(locationList.filter(loc=>loc!==location));
-    else if(location==="후문") setLocationList(locationList.filter(loc=>loc!==location));
-    else if(location==="신촌") setLocationList(locationList.filter(loc=>loc!==location));
+    setSelectedLocationList(selectedLocationList.filter(loc=>loc!==location));
   }
 
+  const checkFoodState=(food)=>{
+    checkFoodTypeSelected(food) ? deleteFoodTypes(food) : addFoodTypes(food);
+  }
+
+  const checkLocationState=(location)=>{
+    checkLocationSelected(location) ? deleteLocation(location) : addLocation(location);
+  }
 
   const handleButtonClick=(event)=>{
 
     const {target:{innerText}}=event;
 
-    if(innerText==="한식") {
-      if(foodType.kor) {setFoodType({...foodType,"kor":false}); deleteFoodTypes("한식");}
-      else {setFoodType({...foodType,"kor":true}); addFoodTypes("한식");}
-    }
-    else if(innerText==="분식"){
-      if(foodType.school) {setFoodType({...foodType,"school":false}); deleteFoodTypes("분식");}
-      else {setFoodType({...foodType,"school":true}); addFoodTypes("분식");}
-    }
-    else if(innerText.substring(0,1)==="양"){
-      if(foodType.west) {setFoodType({...foodType,"west":false}); deleteFoodTypes("양식");}
-      else {setFoodType({...foodType,"west":true}); addFoodTypes("양식");}
-    }
-    else if(innerText.substring(0,1)==="일"){
-      if(foodType.jap){ setFoodType({...foodType,"jap":false}); deleteFoodTypes("일식")}
-      else {setFoodType({...foodType,"jap":true}); addFoodTypes("일식")}
-    }
-    else if(innerText==="중식"){
-      if(foodType.chi) {setFoodType({...foodType,"chi":false}); deleteFoodTypes("중식")}
-      else {setFoodType({...foodType,"chi":true}); addFoodTypes("중식");}
-    }
-    else if(innerText==="패스트푸드"){
-      if(foodType.fast) {setFoodType({...foodType,"fast":false}); deleteFoodTypes("패스트푸드");}
-      else {setFoodType({...foodType,"fast":true}); addFoodTypes("패스트푸드");}
-    }
-    else if(innerText==="정문"){
-      if(location.front) {setLoation({...location,"front":false}); deleteLocation("정문");}
-      else {setLoation({...location,"front":true}); addLocation("정문");}
-    }
-    else if(innerText==="후문"){
-      if(location.back) {setLoation({...location,"back":false}); deleteLocation("후문");}
-      else {setLoation({...location,"back":true}); addLocation("후문");}
-    }
-    else if(innerText==="신촌"){
-      if(location.sinchon) {setLoation({...location,"sinchon":false}); deleteLocation("신촌");}
-      else {setLoation({...location,"sinchon":true}); addLocation("신촌");}
-    }
+    if(innerText==="한식") 
+      checkFoodState("한식");
+    else if(innerText==="분식")
+      checkFoodState("분식");
+    else if(innerText.substring(0,1)==="양")
+      checkFoodState("양식");
+    else if(innerText.substring(0,1)==="일")
+      checkFoodState("일식");
+    else if(innerText==="중식")
+      checkFoodState("중식");
+    else if(innerText==="패스트푸드")
+      checkFoodState("패스트푸드");
+    else if(innerText==="정문")
+      checkLocationState("정문");
+    else if(innerText==="후문")
+      checkLocationState("후문");
+    else if(innerText==="신촌")
+      checkLocationState("신촌");
   }
-
 
   return(
 
     <>
-    {loading && <Loading text="전체 맛집 목록 가져오는중..."/>}
-    {!loading && 
-    <>
-      <Wrapper>
-        <FilterWrapper>
-        <Filter>
-          <FilterName>위치</FilterName>
-          <FilterButton selected={location.front} onClick={handleButtonClick}>정문</FilterButton>
-          <FilterButton selected={location.back} onClick={handleButtonClick}>후문</FilterButton>
-          <FilterButton selected={location.sinchon} onClick={handleButtonClick}>신촌</FilterButton>
-        </Filter>
-        <Filter>
-          <FilterName>음식 종류</FilterName>
-          <FilterButton selected={foodType.kor} onClick={handleButtonClick}>한식</FilterButton>
-          <FilterButton selected={foodType.school} onClick={handleButtonClick}>분식</FilterButton>
-          <FilterButton selected={foodType.west} onClick={handleButtonClick}>양식</FilterButton>
-          <FilterButton selected={foodType.jap} onClick={handleButtonClick}>일식</FilterButton>
-          <FilterButton selected={foodType.chi} onClick={handleButtonClick}>중식</FilterButton>
-          <FilterButton selected={foodType.fast} onClick={handleButtonClick}>패스트푸드</FilterButton>
-        </Filter>
-        <SearchBar {...{setSearchKeyword}}/>
-        </FilterWrapper>
-        <RestaurantList {...{foodDetailList}} {...{searchResult}} />
-      </Wrapper>
-      <FloatingButton onClick={handleRegisterButton}><i class="fas fa-pen"></i></FloatingButton>
-    </>
-    }
+      {loading && <Loading text="전체 맛집 목록 가져오는중..."/>}
+      {!loading && 
+      <>
+        <Wrapper>
+          <FilterWrapper>
+          <Filter>
+            <FilterName>위치</FilterName>
+            <FilterButton selected={checkLocationSelected("정문")} onClick={handleButtonClick}>정문</FilterButton>
+            <FilterButton selected={checkLocationSelected("후문")} onClick={handleButtonClick}>후문</FilterButton>
+            <FilterButton selected={checkLocationSelected("신촌")} onClick={handleButtonClick}>신촌</FilterButton>
+          </Filter>
+          <Filter>
+            <FilterName>음식 종류</FilterName>
+            <FilterButton selected={checkFoodTypeSelected("한식")} onClick={handleButtonClick}>한식</FilterButton>
+            <FilterButton selected={checkFoodTypeSelected("분식")} onClick={handleButtonClick}>분식</FilterButton>
+            <FilterButton selected={checkFoodTypeSelected("양식")} onClick={handleButtonClick}>양식</FilterButton>
+            <FilterButton selected={checkFoodTypeSelected("일식")} onClick={handleButtonClick}>일식</FilterButton>
+            <FilterButton selected={checkFoodTypeSelected("중식")} onClick={handleButtonClick}>중식</FilterButton>
+            <FilterButton selected={checkFoodTypeSelected("패스트푸드")} onClick={handleButtonClick}>패스트푸드</FilterButton>
+          </Filter>
+          <SearchBar {...{setSearchKeyword}}/>
+          </FilterWrapper>
+          <RestaurantList {...{searchResult}}/>
+        </Wrapper>
+        <FloatingButton onClick={handleRegisterButton}><i class="fas fa-pen"></i></FloatingButton>
+      </>
+      }
     </>
     
   )
