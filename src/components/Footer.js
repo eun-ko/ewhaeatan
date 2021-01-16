@@ -4,7 +4,7 @@ import styled from "styled-components";
 export default function Footer(){
   return(
     <Wrapper>
-      EWHA PLATE Copyright © 2021 by Eun & Ayoung
+      이화EAT언 Copyright © 2021 by Eun & Ayoung
     </Wrapper>
   )
 }

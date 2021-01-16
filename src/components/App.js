@@ -11,13 +11,18 @@ function App() {
     <LocationProvider>
     <FoodTypeProvider> 
     <Wrapper>
-      <Router/>
-      <Footer/>
+      <RouterWrapper><Router/></RouterWrapper>
+      <FooterWrapper><Footer/></FooterWrapper>
     </Wrapper>
     </FoodTypeProvider>
     </LocationProvider>
   );
 }
+const RouterWrapper=styled.div`
+`;
+
+const FooterWrapper=styled.div`
+`;
 
 const Wrapper=styled.div`
   display:flex;
@@ -25,9 +30,9 @@ const Wrapper=styled.div`
   justify-content:space-between;
   width: 100%;
   max-width: 26rem;
-  min-height: 100vh;
   margin:0 auto;
-  font-family: 'Noto Sans KR', sans-serif;
+  height:100vh;
+  font-family: 'Jua', sans-serif;
   box-shadow : 0 0 1rem 0 rgba(0, 0, 0, 0.2);
 `;
 
