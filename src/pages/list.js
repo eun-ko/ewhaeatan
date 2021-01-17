@@ -3,6 +3,7 @@ import styled from "styled-components";
 import axios from "axios";
 
 import {SearchBar,Loading,RestaurantList} from "../components";
+import {HOST} from "../services/config";
 
 export default function List({history}){
 
@@ -29,6 +30,7 @@ export default function List({history}){
   },[searchKeyword]); 
 
   useEffect(()=>{
+    setLoading(true);
     getFilteredList();
   },[selectedFoodTypeList,selectedLocationList]);
 
@@ -37,7 +39,7 @@ export default function List({history}){
   }
 
   const getFullListByGET=async()=>{
-    await axios.get('https://ewha-plate.herokuapp.com/list/all')
+    await axios.get(`${HOST}/list/all`)
     .then(({data})=>{
       setFoodDetailList(data);
       setLoading(false);
@@ -58,7 +60,7 @@ export default function List({history}){
   }
 
   const getAllListByPOST=async()=>{
-    await axios.post('https://ewha-plate.herokuapp.com/list',{
+    await axios.post(`${HOST}/list`,{
       "categories":[],
       "ewhaTypes":[]
     },{
@@ -86,7 +88,7 @@ export default function List({history}){
   }
 
   const getFilteredList=async()=>{
-    await axios.post('https://ewha-plate.herokuapp.com/list',{
+    await axios.post(`${HOST}/list`,{
       "categories":selectedFoodTypeList,
       "ewhaTypes":selectedLocationList
     },{
@@ -97,6 +99,7 @@ export default function List({history}){
     .then(({data})=>{
       setFoodDetailList(data);
       setSearchResult(data);
+      setLoading(false);
     })
     .catch((err)=>{
       console.log(err);
@@ -151,30 +154,36 @@ export default function List({history}){
       checkLocationState("신촌");
   }
 
+  const handleReselectButton=()=>{
+    setSelectedLocationList([]);
+    setSelectedFoodTypeList([]);
+  }
+
   return(
 
     <>
-      {loading && <Loading text="전체 맛집 목록 가져오는중..."/>}
+      {loading && <Wrapper><Loading text="맛집 목록 가져오는중..."/></Wrapper>}
       {!loading && 
       <>
         <Wrapper>
           <FilterWrapper>
-          <Filter>
-            <FilterName>위치</FilterName>
-            <FilterButton selected={checkLocationSelected("정문")} onClick={handleButtonClick}>정문</FilterButton>
-            <FilterButton selected={checkLocationSelected("후문")} onClick={handleButtonClick}>후문</FilterButton>
-            <FilterButton selected={checkLocationSelected("신촌")} onClick={handleButtonClick}>신촌</FilterButton>
-          </Filter>
-          <Filter>
-            <FilterName>음식 종류</FilterName>
-            <FilterButton selected={checkFoodTypeSelected("한식")} onClick={handleButtonClick}>한식</FilterButton>
-            <FilterButton selected={checkFoodTypeSelected("분식")} onClick={handleButtonClick}>분식</FilterButton>
-            <FilterButton selected={checkFoodTypeSelected("양식")} onClick={handleButtonClick}>양식</FilterButton>
-            <FilterButton selected={checkFoodTypeSelected("일식")} onClick={handleButtonClick}>일식</FilterButton>
-            <FilterButton selected={checkFoodTypeSelected("중식")} onClick={handleButtonClick}>중식</FilterButton>
-            <FilterButton selected={checkFoodTypeSelected("패스트푸드")} onClick={handleButtonClick}>패스트푸드</FilterButton>
-          </Filter>
-          <SearchBar {...{setSearchKeyword}}/>
+            <Filter>
+              <FilterName>위치</FilterName>
+              <FilterButton selected={checkLocationSelected("정문")} onClick={handleButtonClick}>정문</FilterButton>
+              <FilterButton selected={checkLocationSelected("후문")} onClick={handleButtonClick}>후문</FilterButton>
+              <FilterButton selected={checkLocationSelected("신촌")} onClick={handleButtonClick}>신촌</FilterButton>
+              <ReselectButton onClick={handleReselectButton}><i class="fas fa-redo-alt"></i></ReselectButton>
+            </Filter>
+            <Filter >
+              <FilterName>음식 종류</FilterName>
+              <FilterButton selected={checkFoodTypeSelected("한식")} onClick={handleButtonClick}>한식</FilterButton>
+              <FilterButton selected={checkFoodTypeSelected("분식")} onClick={handleButtonClick}>분식</FilterButton>
+              <FilterButton selected={checkFoodTypeSelected("양식")} onClick={handleButtonClick}>양식</FilterButton>
+              <FilterButton selected={checkFoodTypeSelected("일식")} onClick={handleButtonClick}>일식</FilterButton>
+              <FilterButton selected={checkFoodTypeSelected("중식")} onClick={handleButtonClick}>중식</FilterButton>
+              <FilterButton selected={checkFoodTypeSelected("패스트푸드")} onClick={handleButtonClick}>패스트푸드</FilterButton>
+            </Filter>
+            <SearchBar {...{setSearchKeyword}}/>
           </FilterWrapper>
           <RestaurantList {...{searchResult}}/>
         </Wrapper>
@@ -186,6 +195,7 @@ export default function List({history}){
   )
 }
 
+
 const Wrapper=styled.div`
   display:flex;
   flex-direction:column;
@@ -193,31 +203,35 @@ const Wrapper=styled.div`
 `;
 
 const FilterName=styled.div`
+  width:3.8rem;
   display:flex;
-  justify-content:center;
+  justify-content:flex-start;
   align-items:center;
   margin-right:0.5rem;
 `;
 
 const FilterWrapper=styled.div`
-  padding:0.5rem 0;
+  padding: 0.5rem 0;
   width:100%;
   position:sticky;
   z-index:100;
   top:0;
   background-color:rgba(255,255,255,0.9);
+  box-shadow : 0 0 1rem 0 rgba(0, 0, 0, 0.1);
+  border-radius:0 0 1rem 1rem;
 `;
 
 const Filter=styled.div`
+  position:relative;
   display:flex;
   width:100%;
-  text-align:left;
   height:2.3rem;
   margin-top:0.3rem;
-  margin-left:1rem;
+  padding-left:1rem;
 `;
 
 const FilterButton=styled.button`
+  padding:0 0.5rem;
   display:flex;
   justify-content:center;
   align-items:center;
@@ -228,8 +242,26 @@ const FilterButton=styled.button`
   color:${props=>props.selected? "white" : "inherit"};
   cursor:pointer;
   font-size:0.8rem;
-  font-family: 'Noto Sans KR', sans-serif;
-  margin:0.1rem;
+  font-family: 'Jua', sans-serif;
+  margin:0.15rem;
+`;
+
+const ReselectButton=styled.button`
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  outline:none;
+  border:0.1rem solid rgba(0,0,0,0.01);
+  border-radius:50%;
+  background:rgba(0, 0, 0, 0.2);
+  color:white;
+  cursor:pointer;
+  font-size:1rem;
+  font-family: 'Jua', sans-serif;
+  padding:0.3rem;
+  position:absolute;
+  right:2rem;
+  top:0.3rem;
 `;
 
 const FloatingButton=styled.button`
@@ -238,9 +270,8 @@ const FloatingButton=styled.button`
     box-shadow : 0rem 0rem 1.5rem 0rem rgba(0, 0, 0, 0.4);
   }
   position:fixed;
-  bottom:1.3rem;
-  right:1rem;
-  margin-right:1rem;
+  bottom:2.3em;
+  right:2.3rem;
   box-shadow : 0rem 0rem 1rem 0rem rgba(0, 0, 0, 0.2);
   display:flex;
   justify-content:center;
@@ -251,7 +282,6 @@ const FloatingButton=styled.button`
   font-size:1rem;
   border: 3px solid #00462A;
   border-radius:50%;
-  margin-bottom:1rem;
   color: white ;
   background-color:#00462A;
   cursor: pointer;
