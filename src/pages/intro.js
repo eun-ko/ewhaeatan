@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 
+import {LOGO_IMG} from "../services/config";
+
 export default function Intro({history}){
 
   const handleStartButton=()=>{
@@ -9,7 +11,7 @@ export default function Intro({history}){
   
   return(
     <Wrapper>
-      <LogoImg src="https://i.ibb.co/Dk7ZW4T/image.png" alt="logo" />
+      <LogoImg src={LOGO_IMG} alt="logo" />
       <Content>
         결정장애 이화인들을 위한 맛집 추천 서비스 입니다<br/>
         시작하시려면 아래 버튼을 눌러주세요!

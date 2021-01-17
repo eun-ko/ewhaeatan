@@ -4,7 +4,7 @@ import axios from "axios";
 
 import {FoodTypeContext,LocationContext} from "../services/EwhaContext";
 import {Loading,ResultNotFound} from "../components";
-import {HOST,URL,KAKAO_JS_KEY} from "../services/config";
+import {HOST,URL,KAKAO_JS_KEY,KAKAO_SHARE_IMG} from "../services/config";
 
 export default function Result({history}){
 
@@ -60,10 +60,38 @@ export default function Result({history}){
   }
 
   const handleKakaoShareButton = () => {
-    window.Kakao.init(KAKAO_JS_KEY);
-    window.Kakao.Link.sendScrap({
-      requestUrl: URL,
-    });
+      if (!window.Kakao.isInitialized()) {
+        window.Kakao.init(KAKAO_JS_KEY);
+      }
+      window.Kakao.Link.createDefaultButton({
+        container: `${ShareButton}`,
+        objectType: 'feed',
+        content: {
+          title: `오늘 한 끼는 ${list.name} 어떤가요 ?`,
+          description: `${list.address}`,
+          imageUrl:
+            `${list.imgURL}`,
+          link: {
+            webUrl: `https://ewhaeatan.vercel.app/`,
+            mobileWebUrl: `https://ewhaeatan.vercel.app/`,
+          },
+        },
+        buttons: [
+          {
+            title: '나도 해보기',
+            link: {
+              webUrl: `https://ewhaeatan.vercel.app/`,
+              mobileWebUrl: `https://ewhaeatan.vercel.app/`,
+            },
+          },
+        ],
+        success: function (response) {
+          console.log(response);
+        },
+        fail: function (error) {
+          console.log(error);
+        },
+      });
   }
 
   return(
@@ -78,7 +106,7 @@ export default function Result({history}){
           <Link href={`tel:${list.phone}`}><i class="fas fa-phone-alt"></i> 전화</Link>
           <Link target="blank" href={list.url}><i class="fas fa-link"></i> 링크</Link>
           <ShareButton onClick={handleKakaoShareButton}>
-            <KakaoImg src="https://developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_small.png"/> 공유
+            <KakaoImg src={KAKAO_SHARE_IMG}/> 공유
           </ShareButton>
         </Row>
         <Detail>대표메뉴 : {list.menuName} {list.price} 원</Detail> 

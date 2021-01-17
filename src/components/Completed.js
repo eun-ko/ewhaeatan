@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 import {FoodTypeContext,LocationContext} from "../services/EwhaContext";
-import {KAKAO_JS_KEY,URL} from "../services/config";
+import {KAKAO_JS_KEY,URL,LOGO_IMG} from "../services/config";
 
 function Completed({history}){
 
@@ -18,11 +18,37 @@ function Completed({history}){
   }
 
   const handleKakaoShareButton = () => {
-    window.Kakao.init(KAKAO_JS_KEY);
-    // SDK 초기화 여부를 판단합니다.
-    console.log(window.Kakao.isInitialized());
-    window.Kakao.Link.sendScrap({
-      requestUrl: URL
+    if (!window.Kakao.isInitialized()) {
+      window.Kakao.init(KAKAO_JS_KEY);
+    }
+    window.Kakao.Link.createDefaultButton({
+      container: `${KakaoShareIcon}`,
+      objectType: 'feed',
+      content: {
+        title: `결정장애 이화인들을 위한 맛집 추천 서비스`,
+        description: `시작하시려면 아래 버튼을 눌러주세요!`,
+        imageUrl:
+          `${LOGO_IMG}`,
+        link: {
+          webUrl: `https://ewhaeatan.vercel.app/`,
+          mobileWebUrl: `https://ewhaeatan.vercel.app/`,
+        },
+      },
+      buttons: [
+        {
+          title: '바로보기',
+          link: {
+            webUrl: `https://ewhaeatan.vercel.app/`,
+            mobileWebUrl: `https://ewhaeatan.vercel.app/`,
+          },
+        },
+      ],
+      success: function (response) {
+        console.log(response);
+      },
+      fail: function (error) {
+        console.log(error);
+      },
     });
   }
 
@@ -43,7 +69,9 @@ function Completed({history}){
       <Comment>맛집이 등록되었습니다. 감사합니다.</Comment>
       <Row>
         <ShareLabel>공유하기</ShareLabel>
-        <i onClick={handleKakaoShareButton} style={linkIconStyle} class="fas fa-comment-dots"></i>
+        <KakaoShareIcon>
+          <i onClick={handleKakaoShareButton} style={linkIconStyle} class="fas fa-comment-dots"></i>
+        </KakaoShareIcon>
         <CopyToClipboard text={URL}><i style={linkIconStyle} onClick={()=>alert("클립보드에 복사되었습니다💚")} class="fas fa-link"></i></CopyToClipboard>
       </Row>
       <Button onClick={handleBackButton}>처음으로</Button>
@@ -51,6 +79,10 @@ function Completed({history}){
   )
 }
 export default withRouter(Completed);
+
+const KakaoShareIcon=styled.div`
+  padding-bottom:0.5rem;
+`;
 
 const ShareLabel=styled.p`
   font-size:0.9rem;
