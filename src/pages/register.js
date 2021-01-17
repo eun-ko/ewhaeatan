@@ -5,42 +5,40 @@ import axios from "axios";
 import { Menu, Dropdown } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import {Completed,Loading} from "../components";
+import {HOST} from "../services/config";
 
 export default function Register({history}){
 
-  const [information,setInformation]=useState({name:"",location:"",foodType:""});
+  const [foodInformation,setFoodInformtaion]=useState({name:"",location:"",foodType:""});
   const [registerd,setRegisterd]=useState(false);
   const [loading,setLoading]=useState(false);
 
   const handleLocationDropDown=(e)=>{
-    setInformation({...information,
+    setFoodInformtaion({...foodInformation,
       location:e.target.innerHTML.substring(0,1)==="신"?"신촌":e.target.innerHTML});
   }
 
   const handleFoodTypeDropDown=(e)=>{
     const {target:{innerHTML}}=e;
     if(innerHTML.substring(0,1)==="양") 
-      setInformation({...information,foodType:"양식"});
+      setFoodInformtaion({...foodInformation,foodType:"양식"});
     else if(innerHTML.substring(0,1)==="회")
-      setInformation({...information,foodType:"일식"});
+      setFoodInformtaion({...foodInformation,foodType:"일식"});
     else
-      setInformation({...information,foodType:innerHTML});
+      setFoodInformtaion({...foodInformation,foodType:innerHTML});
   }
 
   const handleInputChange=(e)=>{
-    setInformation({...information,name:e.target.value});
+    setFoodInformtaion({...foodInformation,name:e.target.value});
   }
 
   const handleRegisterButton=async()=>{
-    console.log(information.name);
-    console.log(information.foodType);
-    console.log(information.location);
     setLoading(true);
     await axios
-    .post("https://ewha-plate.herokuapp.com/register",{
-      "name":information.name,
-      "category":information.foodType,
-      "ewhaType":information.location
+    .post(`${HOST}/register`,{
+      "name":foodInformation.name,
+      "category":foodInformation.foodType,
+      "ewhaType":foodInformation.location
     },{
       headers:{
         'Content-Type': 'application/json'
@@ -59,7 +57,7 @@ export default function Register({history}){
   }
 
   const menu = (
-    <Menu>
+    <Menu >
       <Menu.Item key="0">
         <Item onClick={handleFoodTypeDropDown}>한식</Item>
       </Menu.Item>
@@ -82,7 +80,7 @@ export default function Register({history}){
   );
 
   const location = (
-    <Menu>
+    <Menu >
       <Menu.Item key="0">
         <Item onClick={handleLocationDropDown}>정문</Item>
       </Menu.Item>
@@ -96,50 +94,62 @@ export default function Register({history}){
     </Menu>
   );
 
+  const leftArrowIconStyle={
+    display:"flex",
+    alignItems:"center",
+    width:"20%"
+  }
+
   return(
     <>
     {loading && <Loading text="맛집 등록하는중..."/>}
-    {!loading &&
-    <>
-    {registerd && <CWrapper><Completed/></CWrapper>}
-    {!registerd && 
-      <Wrapper>
-      <Header>
-        <i onClick={()=>history.goBack()} style={{display:"flex", alignItems:"center", width:"20%"}} class="fas fa-arrow-left"></i>
-        <Title>맛집 추가</Title>
-        <Button onClick={handleRegisterButton}>완료</Button>
-      </Header>
+      {!loading &&
+        <>
+          {registerd && <CWrapper><Completed/></CWrapper>}
+          
+          {!registerd && 
+          <Wrapper>
+              <Header>
+                <i onClick={()=>history.goBack()} style={leftArrowIconStyle} class="fas fa-arrow-left"></i>
+                <Title>맛집 추가</Title>
+                <Button onClick={handleRegisterButton}>완료</Button>
+              </Header>
 
-      <Form>
-        <Content>
-        <h4>가게명</h4>
-        <Input onChange={handleInputChange} placeholder="등록할 맛집의 이름을 입력해주세요"></Input>
-        </Content>
+              <Form>
+                <Content>
+                  <Label>가게명</Label>
+                  <Input onChange={handleInputChange} placeholder="등록할 맛집의 이름을 입력해주세요"></Input>
+                </Content>
 
-        <Content>
-        <Dropdown overlay={menu} trigger={['click']}>
-          <h4 style={{color:"black"}}  >
-           음식종류 선택 <DownOutlined />
-          </h4>
-        </Dropdown>
-        → {information.foodType}
-        </Content>
+                <Content>
+                  <Dropdown overlay={menu} trigger={['click']}>
+                    <Label>
+                    음식종류 선택 <DownOutlined />
+                    </Label>
+                  </Dropdown>
+                  {foodInformation.foodType}
+                </Content>
 
-        <Content>
-        <Dropdown overlay={location} trigger={['click']}>
-          <h4 style={{color:"black"}}  >
-           위치 선택 <DownOutlined />
-          </h4>
-        </Dropdown>
-        → {information.location}
-        </Content>
-      </Form>
-    </Wrapper>}
-    </>}
+                <Content>
+                  <Dropdown overlay={location} trigger={['click']}>
+                    <Label>
+                    위치 선택 <DownOutlined />
+                    </Label>
+                  </Dropdown>
+                  {foodInformation.location}
+                </Content>
+              </Form>
+          </Wrapper>
+          }
+        </>
+      }
     </>
-
     )
 }
+
+const Label=styled.h4`
+  color:black;
+`;
 
 const Item=styled.button`
   width:100%;
@@ -175,7 +185,7 @@ const Input=styled.input`
   padding:0.3rem;
 `;
 
-const Header=styled.header`
+const Header=styled.div`
   width:90%;
   display: flex;
   justify-content: space-between;
@@ -184,15 +194,16 @@ const Header=styled.header`
 `;
 
 const Button=styled.button`
-  width:3.3rem;
-  font-size:0.8rem;
+  width:3.8rem;
+  padding:0.2rem;
+  font-size:0.9rem;
   border: 3px solid #00462A;
   border-radius:1rem;
   outline:none;
   color: white;
   background-color:#00462A;
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: 'Jua', sans-serif;
 `;
 
 const Title=styled.div`

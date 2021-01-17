@@ -42,20 +42,23 @@ export default function Location({history}){
 const Wrapper=styled.div`
   display:flex;
   height:90vh;
+  width:100%;
   flex-direction:column;
   justify-content:center;
   align-items:center;
 `;
 
 const Question=styled.h2`
-  margin-bottom:2rem;`;
+  margin-bottom:2rem;
+`;
 
 const ButtonGroup=styled.div`
   width:100%;
   display:flex;
   flex-direction:column;
   justify-content:center;
-  align-items:center;`;
+  align-items:center;
+`;
   
 const Button=styled.button`
   width:80%;
@@ -68,6 +71,6 @@ const Button=styled.button`
   background-color: ${props=>props.clicked ? "#00462A":"white"};
   cursor: pointer;
   outline:none;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: 'Jua', sans-serif;
   transition: background-color 0.2s ease-in-out;
 `;

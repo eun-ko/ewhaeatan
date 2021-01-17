@@ -33,7 +33,7 @@ const Wrapper=styled.div`
   margin:0 auto;
   height:100vh;
   font-family: 'Jua', sans-serif;
-  box-shadow : 0 0 1rem 0 rgba(0, 0, 0, 0.2);
+  box-shadow : 0rem -1rem 0.4rem 0.4rem rgba(0, 0, 0, 0.1);
 `;
 
 export default App;
