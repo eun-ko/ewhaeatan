@@ -4,15 +4,16 @@ import axios from "axios";
 
 import {FoodTypeContext,LocationContext} from "../services/EwhaContext";
 import {Loading,ResultNotFound} from "../components";
+import {HOST,URL,KAKAO_JS_KEY,KAKAO_SHARE_IMG} from "../services/config";
 
 export default function Result({history}){
 
   const [location]=useContext(LocationContext);
   const [foodType]=useContext(FoodTypeContext);
 
-  const [list,setList]=useState({name:"",address:"",phone:"",imgURL:"",menuList:[]});
+  const [list,setList]=useState({name:"",address:"",phone:"",imgURL:"",menuName:"",price:0,url:""});
   const [loading,setLoading]=useState(true);
-  const [restartClicked,setRestartClicked]=useState(0);
+  const [restartClicked,setRestartClicked]=useState(false);
   const [resultEmpty,setResultEmpty]=useState({success:true,message:""});
 
   useEffect(()=>{
@@ -27,7 +28,7 @@ export default function Result({history}){
   }
 
   const getRandom=async()=>{
-    await axios.post("https://ewha-plate.herokuapp.com/random",{
+    await axios.post(`${HOST}/random`,{
       "categories":foodType,
       "ewhaType":location
     },{
@@ -43,10 +44,12 @@ export default function Result({history}){
         address:data.address,
         phone:data.phone,
         imgURL:data.imageUrl,
-        menuList:data.menuList});
+        menuName:data.menu.menuName,
+        price:data.menu.price,
+        url:data.url
+      });
       }
       else if(!data.success){
-        console.log("setResultEmpty로 들어옴");
         setResultEmpty({success:data.success, message:data.message});
       }
       setLoading(false);
@@ -54,36 +57,127 @@ export default function Result({history}){
     );
     
   }
+
+  const handleKakaoShareButton = () => {
+      if (!window.Kakao.isInitialized()) {
+        window.Kakao.init(KAKAO_JS_KEY);
+      }
+      window.Kakao.Link.createDefaultButton({
+        container: `${ShareButton}`,
+        objectType: 'feed',
+        content: {
+          title: `오늘 한 끼는 ${list.name} 어떤가요 ?`,
+          description: `${list.address}`,
+          imageUrl:
+            `${list.imgURL}`,
+          link: {
+            webUrl: `${URL}`,
+            mobileWebUrl: `${URL}`,
+          },
+        },
+        buttons: [
+          {
+            title: '나도 해보기',
+            link: {
+              webUrl: `${URL}`,
+              mobileWebUrl: `${URL}`,
+            },
+          },
+        ],
+        success: function (response) {
+          console.log(response);
+        },
+        fail: function (error) {
+          console.log(error);
+        },
+      });
+  }
+
   return(
     <>
-    {loading && <Wrapper><Loading text="결과 가져오는중..."/></Wrapper>}
-    {!loading && resultEmpty.success &&
-      <Wrapper>
-        <Content>그럼 오늘은 <strong>{list.name}</strong> 어때?</Content>
-        <Img src={list.imgURL} />
-        <Detail>{list.address}</Detail>
-        <Detail style={{margin:0}}>{list.phone}</Detail>
-        {
-          list.menuList.length!==0 && 
-          <> 
-            <h3 style={{margin:0, marginTop:"0.8rem"}}>대표메뉴</h3>
-            <Detail> {list.menuList[0].menuName} {list.menuList[0].price} 원</Detail>
-          </>
-        }  
-        <ButtonGroup>
-        <Button onClick={handleRestartButton} >다시하기</Button>
-        <Button onClick={()=>{history.push("/list")}} >전체 리스트</Button>
-        </ButtonGroup>
-      </Wrapper>
-    }
-    {!loading && !resultEmpty.success &&
-      <Wrapper>
-        <ResultNotFound message={resultEmpty.message}/>
-      </Wrapper>
-    }
+      {
+        loading && 
+        <Wrapper>
+          <Loading text="결과 가져오는중..."/>
+        </Wrapper>
+      }
+      {
+        !loading && 
+        resultEmpty.success &&
+        <Wrapper>
+          <Content>그럼 오늘은 <Name>{list.name}</Name> 어때?</Content>
+          <Img src={list.imgURL} />
+          <Detail><i class="fas fa-map-marker-alt"></i> {list.address}</Detail>
+          <Row>
+            <Link href={`tel:${list.phone}`}><i class="fas fa-phone-alt"></i> 전화</Link>
+            <Link target="blank" href={list.url}><i class="fas fa-link"></i> 링크</Link>
+            <ShareButton onClick={handleKakaoShareButton}>
+              <KakaoImg src={KAKAO_SHARE_IMG}/> 공유
+            </ShareButton>
+          </Row>
+          <Detail>대표메뉴 : {list.menuName} {list.price} 원</Detail> 
+          <ButtonGroup>
+            <Button onClick={handleRestartButton} >다시하기</Button>
+            <Button onClick={()=>{history.push("/list")}} >전체 리스트</Button>
+          </ButtonGroup>
+        </Wrapper>
+      }
+      {
+        !loading && 
+        !resultEmpty.success &&
+        <Wrapper>
+          <ResultNotFound message={resultEmpty.message}/>
+        </Wrapper>
+      }
     </>
   )
 }
+
+const KakaoImg=styled.img`
+  width:1.5rem;
+`;
+
+const ShareButton=styled.button`
+  font-size:0.9rem;
+  outline: none;
+  padding:0.2rem;
+  color:#00462A;
+  border: 0.1rem solid rgba(0,0,0,0.1);
+  border-radius:1rem;
+  width:5.5rem;
+  background-color:white;
+  height:2rem;
+  cursor:pointer;
+  &:hover,active{
+    text-decoration: none;
+    color:rgba(0,0,0,0.7);
+  }
+`;
+
+const Name=styled.strong``;
+
+const Row=styled.div`
+  display:flex;
+  margin:0.5rem 0;
+`;
+
+const Link=styled.a`
+  margin-right:0.2rem;
+  text-align:center;
+  padding:0.2rem;
+  font-size:0.9rem;
+  text-decoration:none;
+  outline: none;
+  color:#00462A;
+  border: 0.1rem solid rgba(0,0,0,0.1);
+  border-radius:1rem;
+  width:4.5rem;
+  height:2rem;
+  &:hover,active{
+    text-decoration: none;
+    color:rgba(0,0,0,0.7);
+  }
+`;
 
 const Wrapper=styled.div`
   display:flex;
@@ -92,26 +186,30 @@ const Wrapper=styled.div`
   align-items:center;
   width:100%;
   height:90vh;
+  margin:3.5rem 0 0 0;
+  box-sizing:border-box;
 `;
+
 const Content=styled.h2``;
 
 const Img=styled.img`
   width:15rem;
   height:15rem;
   border:none;
-  margin:1rem;`;
+  margin:1rem;
+`;
 
 const Detail=styled.div`
-  margin-bottom:0.6rem;
   font-size:1rem;
-  `;
+  margin:0.2rem;
+`;
 
 const ButtonGroup=styled.div`
-  margin-top:0.7rem;
-  width:90%;
+  margin:1rem;
+  width:80%;
   display:flex;
   justify-content:space-evenly; 
- `;
+`;
 
 const Button=styled.button`
   width:6.5rem;
@@ -124,5 +222,5 @@ const Button=styled.button`
   background-color:#00462A;
   cursor: pointer;
   outline:none;
-  font-family: 'Noto Sans KR', sans-serif;
-  `;
+  font-family: 'Jua', sans-serif;
+`;

@@ -12,8 +12,7 @@ export default function FoodType({history}){
   }
 
   const deleteFoodTypes=(food)=>{
-    foodType.splice(foodType.indexOf(food),1);
-    setFoodType(foodType);
+    setFoodType(foodType.filter(f=>f!==food));
   }
 
   const checkFoodTypeSelected=(food)=>{
@@ -30,6 +29,7 @@ export default function FoodType({history}){
       addFoodTypes(foodType);
     }
   }
+
   const handleButtonClick=(event)=>{
 
     const {target:{innerText}}=event;
@@ -60,10 +60,11 @@ export default function FoodType({history}){
 
   return(
     <Wrapper>
-      <Question>
-        <p style={{fontWeight:"600",margin:"0"}}>먹고 싶은 건 모르겠고..</p>
-        <p style={{fontWeight:"600",margin:"0"}}>일단 이건 안땡기는 것 같아 🤔</p>
-      </Question>
+      <QuestionWrapper>
+        <Question>먹고 싶은 건 모르겠고...</Question>
+        <Question>일단 이건 <Highlight>안땡기는 것</Highlight> 같아 🤔</Question>
+        <Warning> ※ 다 먹고싶다면 아무것도 선택하지 말고<br/> 결과보기를 눌러주세요!</Warning>
+      </QuestionWrapper>
       <ButtonGroup>
         <Button selected={checkFoodTypeSelected("한식")} onClick={handleButtonClick} >한식</Button>
         <Button selected={checkFoodTypeSelected("분식")} onClick={handleButtonClick} >분식</Button>
@@ -72,11 +73,28 @@ export default function FoodType({history}){
         <Button selected={checkFoodTypeSelected("중식")} onClick={handleButtonClick} >중식</Button>
         <Button selected={checkFoodTypeSelected("패스트푸드")} onClick={handleButtonClick} >패스트푸드</Button>
       </ButtonGroup>
-      <strong style={{fontSize:"1rem"}}>다 골랐다면...?</strong>
+      <Question>다 골랐다면...?</Question>
       <ConfirmButton onClick={handleSubmit}>결과보기</ConfirmButton>
     </Wrapper>
   )
 }
+
+const Question=styled.p`
+  margin:0;
+  font-size:1.2rem;
+`;
+
+const Highlight=styled.span`
+  background-color:#00462A;
+  color:white;
+`;
+
+const Warning=styled.p`
+  font-size:0.8rem;
+  margin:0.7rem 0 0 0;
+  text-align:center;
+  color:rgba(192, 57, 43,0.9);
+`;
 
 const Wrapper=styled.div`
   display:flex;
@@ -87,11 +105,14 @@ const Wrapper=styled.div`
   height:90vh;
 `;
 
-const Question=styled.h3`
+const QuestionWrapper=styled.h3`
   display:flex;
   flex-direction:column;
   align-items:center;
   padding:1.5rem;
+  font-size:1.2rem;
+  font-weight:600;
+  text-align:center;
   `;
 
 const ButtonGroup=styled.div`
@@ -104,7 +125,7 @@ const ButtonGroup=styled.div`
   `;
 
 const ConfirmButton=styled.button` 
-  width:7rem;
+  width:6.7rem;
   height:2.5rem;
   background-color:#00462A;
   color:white;
@@ -114,6 +135,8 @@ const ConfirmButton=styled.button`
   cursor: pointer;
   margin-top:1.5rem;
   animation: bounceIn 4s ease-in-out ;
+  font-size:1.1rem;
+  font-family: 'Jua', sans-serif;
   @keyframes bounceIn {
     0%, 100%, 20%, 40%, 60%, 80% {
       transition-timing-function: cubic-bezier(0.215, .61, .355, 1)
@@ -145,9 +168,9 @@ const ConfirmButton=styled.button`
 `;
 
 const Button=styled.button`
-  width:8rem;
+  width:9rem;
   height:2.5rem;
-  font-size:0.9rem;
+  font-size:1rem;
   border: none;
   border-radius:1rem;
   margin: 1rem 1rem;
@@ -156,6 +179,6 @@ const Button=styled.button`
   box-shadow: ${props=>props.selected ? "0 0 1rem 0 rgba(0, 70, 42, 0.5)" : 0};
   cursor: pointer;
   outline:none;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: 'Jua', sans-serif;
   transition: box-shadow 0.2s ease-in-out;
 `;

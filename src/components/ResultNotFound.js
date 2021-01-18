@@ -45,5 +45,5 @@ const Button=styled.button`
   background-color:#00462A;
   cursor: pointer;
   outline:none;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: 'Jua', sans-serif;
   `;

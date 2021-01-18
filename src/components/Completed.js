@@ -1,27 +1,96 @@
-import React from "react";
+import React,{useContext} from "react";
 import styled from "styled-components";
 import { withRouter } from 'react-router-dom';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 
+import {FoodTypeContext,LocationContext} from "../services/EwhaContext";
+import {KAKAO_JS_KEY,URL,LOGO_IMG} from "../services/config";
+
 function Completed({history}){
-  
-  const url = window.location.href;
+
+  const [,setLocation]=useContext(LocationContext);
+  const [,setFoodType]=useContext(FoodTypeContext);
+
+  const handleBackButton=()=>{
+    setLocation("");
+    setFoodType([]);
+    history.push("/");
+  }
+
+  const handleKakaoShareButton = () => {
+    if (!window.Kakao.isInitialized()) {
+      window.Kakao.init(KAKAO_JS_KEY);
+    }
+    window.Kakao.Link.createDefaultButton({
+      container: `${KakaoShareIcon}`,
+      objectType: 'feed',
+      content: {
+        title: `결정장애 이화인들을 위한 맛집 추천 서비스`,
+        description: `시작하시려면 아래 버튼을 눌러주세요!`,
+        imageUrl:
+          `${LOGO_IMG}`,
+        link: {
+          webUrl: `${URL}`,
+          mobileWebUrl: `${URL}`,
+        },
+      },
+      buttons: [
+        {
+          title: '바로보기',
+          link: {
+            webUrl: `${URL}`,
+            mobileWebUrl: `${URL}`,
+          },
+        },
+      ],
+      success: function (response) {
+        console.log(response);
+      },
+      fail: function (error) {
+        console.log(error);
+      },
+    });
+  }
+
+  const linkIconStyle={
+    cursor:"pointer"
+  }
+
+  const successIconStyle={
+    fontSize:"1.8rem",
+    color:"#00462A",
+    marginBottom:"0.8rem"
+  }
 
   return(
     <Wrapper>
-      <h2>✨</h2>
-      <h2>등록 완료</h2>
-      <p>맛집이 등록되었습니다. 감사합니다.</p>
+      <i style={successIconStyle} class="fas fa-check-circle"></i>
+      <Status>등록 완료</Status>
+      <Comment>맛집이 등록되었습니다. 감사합니다.</Comment>
       <Row>
-      <p style={{fontSize:"0.9rem"}}>공유하기</p>
-      <i class="fas fa-comment-dots"></i>
-      <CopyToClipboard text={url}><i class="fas fa-link"></i></CopyToClipboard>
+        <ShareLabel>공유하기</ShareLabel>
+        <KakaoShareIcon>
+          <i onClick={handleKakaoShareButton} style={linkIconStyle} class="fas fa-comment-dots"></i>
+        </KakaoShareIcon>
+        <CopyToClipboard text={URL}><i style={linkIconStyle} onClick={()=>alert("클립보드에 복사되었습니다💚")} class="fas fa-link"></i></CopyToClipboard>
       </Row>
-      <Button onClick={()=>history.push("/")}>처음으로</Button>
+      <Button onClick={handleBackButton}>처음으로</Button>
     </Wrapper>
   )
 }
 export default withRouter(Completed);
+
+const KakaoShareIcon=styled.div`
+  padding-bottom:0.5rem;
+`;
+
+const ShareLabel=styled.p`
+  font-size:0.9rem;
+`;
+
+const Comment=styled.p``;
+
+const Status=styled.h2``;
 
 const Row=styled.div`
   display:flex;
@@ -42,7 +111,7 @@ const Button=styled.button`
   color: white;
   background-color:#00462A;
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: 'Jua', sans-serif;
 `;
 
 const Wrapper=styled.div`

@@ -31,6 +31,6 @@ const Button=styled.button`
   color: white;
   background-color:#00462A;
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: 'Jua', sans-serif;
 `;
 

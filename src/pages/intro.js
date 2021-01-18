@@ -1,22 +1,31 @@
 import React from "react";
 import styled from "styled-components";
 
+import {LOGO_IMG} from "../services/config";
+
 export default function Intro({history}){
+
   const handleStartButton=()=>{
     history.push("/location");
   }
+  
   return(
     <Wrapper>
-      <Title>서비스 타이틀</Title>
+      <LogoImg src={LOGO_IMG} alt="logo" />
       <Content>
-        <p style={{marginBottom:"0"}}>결정장애 이화인들을 위한 맛집 추천 서비스 입니다</p>
-        <p style={{marginBottom:"3rem"}}>시작하시려면 아래 버튼을 눌러주세요!</p>
+        결정장애 이화인들을 위한 맛집 추천 서비스 입니다<br/>
+        시작하시려면 아래 버튼을 눌러주세요!
       </Content>
       <StartButton onClick={handleStartButton}>시작하기</StartButton>
-      </Wrapper>
+    </Wrapper>
     
   )
 }
+
+const LogoImg=styled.img`
+  width:15rem;
+  margin:8rem 0 2rem 0;
+`;
 
 const Wrapper=styled.div`
   display:flex;
@@ -24,16 +33,21 @@ const Wrapper=styled.div`
   justify-content:center;
   align-items:center;
   width:100%;
-  height:90vh;
+  height:90%;
 `;
-const Title=styled.h2``;
+
 const Content=styled.div`
   display:flex;
   flex-direction:column;
-  align-items:center;
+  text-align:center;
+  font-family: 'Jua', sans-serif;
+  font-size:1rem;
+  color:rgba(0,0,0,0.7);
+  margin-bottom:2.8rem;
 `;
+
 const StartButton=styled.button`
-  width:9rem;
+  width:7rem;
   height:2.5rem;
   font-size:1rem;
   border: 3px solid #00462A;
@@ -42,7 +56,7 @@ const StartButton=styled.button`
   color: white;
   background-color:#00462A;
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: 'Jua', sans-serif;
   animation: fadeInUp 1s ;
   @keyframes fadeInUp {
     0% {
@@ -54,4 +68,4 @@ const StartButton=styled.button`
       transform: none
     }
   }
-  `;
+`;

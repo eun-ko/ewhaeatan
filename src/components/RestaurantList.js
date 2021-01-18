@@ -3,30 +3,59 @@ import styled from "styled-components";
 
 export default function RestaurantList({searchResult}){
 
-  const restuarantList=searchResult && searchResult.map((restaurant)=>{
-    return(
-      <Contents key={restaurant.id}>
-      <Img src={restaurant.imageUrl}/>
-      <Column>
-        <h4 style={{margin:0}}>{restaurant.name}</h4>
-        <Detail>{restaurant.address}</Detail>
-        <Detail>{restaurant.phone}</Detail>
-        <h5 style={{margin:0, marginTop:"0.8rem"}}>대표메뉴</h5>
-        <Detail>{restaurant.menuList[0] && restaurant.menuList[0].menuName} {restaurant.menuList[0] && restaurant.menuList[0].price}원</Detail>
-      </Column>
-    </Contents>
-    )
-  })
+  const restuarantList=
+        searchResult && 
+        !searchResult.success && 
+        searchResult.map((restaurant)=>{
+          return(
+            <Contents key={restaurant.id}>
+              <Img src={restaurant.imageUrl}/>
+              <Column>
+                <Name>{restaurant.name}</Name>
+                <Address><i class="fas fa-map-marker-alt"></i> {restaurant.address}</Address>
+                <Link href={`tel:${restaurant.phone}`}><i class="fas fa-phone-alt"></i> {restaurant.phone}</Link>
+                <Label>대표메뉴</Label>
+                <Detail>{restaurant.menu && restaurant.menu.menuName} {restaurant.menu && restaurant.menu.price}원</Detail>
+                <Link target="blank" href={restaurant.url}><Label><i class="fas fa-link"></i> 상세정보 링크</Label></Link>
+              </Column>
+            </Contents>
+          )
+        })
 
   
   return(
-        <>
+        <>        
           {restuarantList}
         </>
   );
 }
 
-  const Contents=styled.div`
+const Link=styled.a`
+  font-size:0.8rem;
+  text-decoration:none;
+  text-decoration: none; 
+  outline: none;
+  color:#00462A;
+  &:hover,active{
+    text-decoration: none;
+    color:rgba(0,0,0,0.7);
+  }
+`;
+
+const Name=styled.h3`
+  margin:0;
+`;
+
+const Address=styled.div`
+  font-size:0.8rem;
+  `;
+
+const Label=styled.div`
+  font-size:0.8rem;
+  margin:0.6rem 0 0 0;
+`;
+
+const Contents=styled.div`
   display:flex;
   justify-content:space-around;
   width:99%;
@@ -45,10 +74,11 @@ const Detail=styled.div`
 const Column =styled.div`
   display:flex;
   flex-direction:column;
-  width:60%;
+  width:57%;
   `;
 
 const Img=styled.img`
-  width:7rem;
-  height:7rem;
+  width:8.3rem;
+  height:8.3rem;
+  border-radius:0.3rem;
   `;
