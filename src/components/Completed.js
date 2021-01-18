@@ -1,4 +1,4 @@
-import React,{useContext} from "react";
+import React,{useContext,useEffect} from "react";
 import styled from "styled-components";
 import { withRouter } from 'react-router-dom';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
@@ -11,6 +11,11 @@ function Completed({history}){
   const [,setLocation]=useContext(LocationContext);
   const [,setFoodType]=useContext(FoodTypeContext);
 
+  useEffect(()=>{
+    if (!window.Kakao.isInitialized())
+      window.Kakao.init(KAKAO_JS_KEY);
+  },[])
+
   const handleBackButton=()=>{
     setLocation("");
     setFoodType([]);
@@ -18,11 +23,7 @@ function Completed({history}){
   }
 
   const handleKakaoShareButton = () => {
-    if (!window.Kakao.isInitialized()) {
-      window.Kakao.init(KAKAO_JS_KEY);
-    }
-    window.Kakao.Link.createDefaultButton({
-      container: `${KakaoShareIcon}`,
+    window.Kakao.Link.sendDefault({
       objectType: 'feed',
       content: {
         title: `결정장애 이화인들을 위한 맛집 추천 서비스`,

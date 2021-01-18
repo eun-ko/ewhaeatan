@@ -16,6 +16,6 @@ const Wrapper=styled.div`
   font-size:0.6rem;
   justify-content:flex-end;
   background-color:#f2f2f2;
-  height:3rem;
+  height:100%;
   width:100%;
 `;
