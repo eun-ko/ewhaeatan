@@ -24,7 +24,7 @@ export default function Intro({history}){
 
 const LogoImg=styled.img`
   width:15rem;
-  margin:8rem 0 2rem 0;
+  margin:0 0 2rem 0;
 `;
 
 const Wrapper=styled.div`
@@ -33,7 +33,9 @@ const Wrapper=styled.div`
   justify-content:center;
   align-items:center;
   width:100%;
-  height:90%;
+  height:91vh;
+  //box-shadow : 0rem -1rem 0.4rem 0.4rem rgba(0, 0, 0, 0.1);
+  box-shadow:0 0 1rem 0 rgba(0, 0, 0, 0.1);
 `;
 
 const Content=styled.div`

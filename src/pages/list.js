@@ -186,8 +186,9 @@ export default function List({history}){
             <SearchBar {...{setSearchKeyword}}/>
           </FilterWrapper>
           <RestaurantList {...{searchResult}}/>
+          <FloatingButton onClick={handleRegisterButton}><i class="fas fa-pen"></i></FloatingButton>
         </Wrapper>
-        <FloatingButton onClick={handleRegisterButton}><i class="fas fa-pen"></i></FloatingButton>
+
       </>
       }
     </>
@@ -199,7 +200,8 @@ export default function List({history}){
 const Wrapper=styled.div`
   display:flex;
   flex-direction:column;
-  width:100%;
+  width:100%;  
+  box-shadow:0 0 1rem 0 rgba(0, 0, 0, 0.1);
 `;
 
 const FilterName=styled.div`
@@ -286,5 +288,18 @@ const FloatingButton=styled.button`
   background-color:#00462A;
   cursor: pointer;
   outline:none;
-  font-family: 'Noto Sans KR', sans-serif;
+  /*
+  @keyframes heartBeat {
+    0% {
+      transform: none;
+    }
+    50% {
+      transform: scale(1.1);
+    }
+    100% {
+      transform: none;
+    }
+  }
+  animation: heartBeat 1.5s linear infinite;
+  */
   `;
