@@ -30,16 +30,16 @@ function Completed({history}){
         imageUrl:
           `${LOGO_IMG}`,
         link: {
-          webUrl: `https://ewhaeatan.vercel.app/`,
-          mobileWebUrl: `https://ewhaeatan.vercel.app/`,
+          webUrl: `${URL}`,
+          mobileWebUrl: `${URL}`,
         },
       },
       buttons: [
         {
           title: '바로보기',
           link: {
-            webUrl: `https://ewhaeatan.vercel.app/`,
-            mobileWebUrl: `https://ewhaeatan.vercel.app/`,
+            webUrl: `${URL}`,
+            mobileWebUrl: `${URL}`,
           },
         },
       ],

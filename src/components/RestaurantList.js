@@ -3,21 +3,24 @@ import styled from "styled-components";
 
 export default function RestaurantList({searchResult}){
 
-  const restuarantList=searchResult && !searchResult.success && searchResult.map((restaurant)=>{
-    return(
-      <Contents key={restaurant.id}>
-        <Img src={restaurant.imageUrl}/>
-        <Column>
-          <Name>{restaurant.name}</Name>
-          <Address><i class="fas fa-map-marker-alt"></i> {restaurant.address}</Address>
-          <Link href={`tel:${restaurant.phone}`}><i class="fas fa-phone-alt"></i> {restaurant.phone}</Link>
-          <Label>대표메뉴</Label>
-          <Detail>{restaurant.menu && restaurant.menu.menuName} {restaurant.menu && restaurant.menu.price}원</Detail>
-          <Link target="blank" href={restaurant.url}><Label><i class="fas fa-link"></i> 상세정보 링크</Label></Link>
-        </Column>
-      </Contents>
-    )
-  })
+  const restuarantList=
+        searchResult && 
+        !searchResult.success && 
+        searchResult.map((restaurant)=>{
+          return(
+            <Contents key={restaurant.id}>
+              <Img src={restaurant.imageUrl}/>
+              <Column>
+                <Name>{restaurant.name}</Name>
+                <Address><i class="fas fa-map-marker-alt"></i> {restaurant.address}</Address>
+                <Link href={`tel:${restaurant.phone}`}><i class="fas fa-phone-alt"></i> {restaurant.phone}</Link>
+                <Label>대표메뉴</Label>
+                <Detail>{restaurant.menu && restaurant.menu.menuName} {restaurant.menu && restaurant.menu.price}원</Detail>
+                <Link target="blank" href={restaurant.url}><Label><i class="fas fa-link"></i> 상세정보 링크</Label></Link>
+              </Column>
+            </Contents>
+          )
+        })
 
   
   return(

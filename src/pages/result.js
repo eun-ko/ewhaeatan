@@ -19,7 +19,6 @@ export default function Result({history}){
   useEffect(()=>{
     getRandom();
     setResultEmpty({success:true,message:""});
-    console.log(foodType,location);
   },[restartClicked]);
 
   const handleRestartButton=()=>{
@@ -72,16 +71,16 @@ export default function Result({history}){
           imageUrl:
             `${list.imgURL}`,
           link: {
-            webUrl: `https://ewhaeatan.vercel.app/`,
-            mobileWebUrl: `https://ewhaeatan.vercel.app/`,
+            webUrl: `${URL}`,
+            mobileWebUrl: `${URL}`,
           },
         },
         buttons: [
           {
             title: '나도 해보기',
             link: {
-              webUrl: `https://ewhaeatan.vercel.app/`,
-              mobileWebUrl: `https://ewhaeatan.vercel.app/`,
+              webUrl: `${URL}`,
+              mobileWebUrl: `${URL}`,
             },
           },
         ],
@@ -96,31 +95,40 @@ export default function Result({history}){
 
   return(
     <>
-    {loading && <Wrapper><Loading text="결과 가져오는중..."/></Wrapper>}
-    {!loading && resultEmpty.success &&
-      <Wrapper>
-        <Content>그럼 오늘은 <Name>{list.name}</Name> 어때?</Content>
-        <Img src={list.imgURL} />
-        <Detail><i class="fas fa-map-marker-alt"></i> {list.address}</Detail>
-        <Row>
-          <Link href={`tel:${list.phone}`}><i class="fas fa-phone-alt"></i> 전화</Link>
-          <Link target="blank" href={list.url}><i class="fas fa-link"></i> 링크</Link>
-          <ShareButton onClick={handleKakaoShareButton}>
-            <KakaoImg src={KAKAO_SHARE_IMG}/> 공유
-          </ShareButton>
-        </Row>
-        <Detail>대표메뉴 : {list.menuName} {list.price} 원</Detail> 
-        <ButtonGroup>
-          <Button onClick={handleRestartButton} >다시하기</Button>
-          <Button onClick={()=>{history.push("/list")}} >전체 리스트</Button>
-        </ButtonGroup>
-      </Wrapper>
-    }
-    {!loading && !resultEmpty.success &&
-      <Wrapper>
-        <ResultNotFound message={resultEmpty.message}/>
-      </Wrapper>
-    }
+      {
+        loading && 
+        <Wrapper>
+          <Loading text="결과 가져오는중..."/>
+        </Wrapper>
+      }
+      {
+        !loading && 
+        resultEmpty.success &&
+        <Wrapper>
+          <Content>그럼 오늘은 <Name>{list.name}</Name> 어때?</Content>
+          <Img src={list.imgURL} />
+          <Detail><i class="fas fa-map-marker-alt"></i> {list.address}</Detail>
+          <Row>
+            <Link href={`tel:${list.phone}`}><i class="fas fa-phone-alt"></i> 전화</Link>
+            <Link target="blank" href={list.url}><i class="fas fa-link"></i> 링크</Link>
+            <ShareButton onClick={handleKakaoShareButton}>
+              <KakaoImg src={KAKAO_SHARE_IMG}/> 공유
+            </ShareButton>
+          </Row>
+          <Detail>대표메뉴 : {list.menuName} {list.price} 원</Detail> 
+          <ButtonGroup>
+            <Button onClick={handleRestartButton} >다시하기</Button>
+            <Button onClick={()=>{history.push("/list")}} >전체 리스트</Button>
+          </ButtonGroup>
+        </Wrapper>
+      }
+      {
+        !loading && 
+        !resultEmpty.success &&
+        <Wrapper>
+          <ResultNotFound message={resultEmpty.message}/>
+        </Wrapper>
+      }
     </>
   )
 }
