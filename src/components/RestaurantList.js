@@ -4,28 +4,43 @@ import styled from "styled-components";
 export default function RestaurantList({searchResult}){
 
   const restuarantList=
-        searchResult && 
-        !searchResult.success && 
+        Array.isArray(searchResult) && 
         searchResult.map((restaurant)=>{
           return(
             <Contents key={restaurant.id}>
-              <Img src={restaurant.imageUrl}/>
+              <ImgLink target="blank" href={restaurant.url}><Img src={restaurant.imageUrl}/></ImgLink>
               <Column>
                 <Name>{restaurant.name}</Name>
                 <Address><i class="fas fa-map-marker-alt"></i> {restaurant.address}</Address>
                 <Link href={`tel:${restaurant.phone}`}><i class="fas fa-phone-alt"></i> {restaurant.phone}</Link>
                 <Label>대표메뉴</Label>
                 <Detail>{restaurant.menu && restaurant.menu.menuName} {restaurant.menu && restaurant.menu.price}원</Detail>
-                <Link target="blank" href={restaurant.url}><Label><i class="fas fa-link"></i> 상세정보 링크</Label></Link>
               </Column>
             </Contents>
           )
         })
 
-  
   return(
-        <>        
-          {restuarantList}
+        <>
+          {
+            !Array.isArray(searchResult) && 
+            !searchResult.success &&
+            <Wrapper>
+              해당 맛집이 아직 없습니다<br/>
+              추가해주세요!
+            </Wrapper>
+          }
+
+          {
+            searchResult.length===0 &&
+            <Wrapper>
+              검색 결과가 없습니다
+            </Wrapper>
+          }
+
+          {
+            searchResult && restuarantList
+          }
         </>
   );
 }
@@ -39,6 +54,12 @@ const Link=styled.a`
   &:hover,active{
     text-decoration: none;
     color:rgba(0,0,0,0.7);
+  }
+`;
+
+const ImgLink=styled.a`
+  &:hover,active{
+    opacity:0.7;
   }
 `;
 
@@ -82,3 +103,13 @@ const Img=styled.img`
   height:8.3rem;
   border-radius:0.3rem;
   `;
+
+  const Wrapper=styled.div`
+  display:flex;
+  width:100%;  
+  heifht:100%;
+  height:65.5vh;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+`;
