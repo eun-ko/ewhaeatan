@@ -183,9 +183,9 @@ export default function List({history}){
               <FilterButton selected={checkFoodTypeSelected("중식")} onClick={handleButtonClick}>중식</FilterButton>
               <FilterButton selected={checkFoodTypeSelected("패스트푸드")} onClick={handleButtonClick}>패스트푸드</FilterButton>
             </Filter>
-            <SearchBar {...{setSearchKeyword}}/>
+            <SearchBar {...{setSearchKeyword}} {...{setSearchResult}} {...{foodDetailList}}/>
           </FilterWrapper>
-          <RestaurantList {...{searchResult}}/>
+          <RestaurantList {...{searchResult}} />
           <FloatingButton onClick={handleRegisterButton}><i class="fas fa-pen"></i></FloatingButton>
         </Wrapper>
 

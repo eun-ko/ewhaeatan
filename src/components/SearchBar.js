@@ -1,12 +1,25 @@
 import React,{useState,useEffect} from "react";
 import styled from "styled-components";
 
-export default function SearchBar({setSearchKeyword}){
+export default function SearchBar({setSearchKeyword,setSearchResult,foodDetailList}){
 
   const [input,setInput]=useState();
   
   useEffect(()=>{
-    setSearchKeyword(input);
+
+    if(input===undefined){
+      /* if the button is selected after input has been empty, 
+      input appears as undefined. */
+      setSearchResult(foodDetailList);
+    }
+    else if(input!==""){
+      setSearchKeyword(input);
+    }
+    else{
+      /* when input is cleared. */
+      setSearchResult(foodDetailList); 
+      /* Set searchResult to filtered foodDetailList */
+    }
   },[input]);
 
   const handleInputChange=(e)=>{
