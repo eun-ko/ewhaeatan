@@ -13,7 +13,7 @@ export default function Intro({history}){
     <Wrapper>
       <LogoImg src={LOGO_IMG} alt="logo" />
       <Content>
-        결정장애 이화인들을 위한 맛집 추천 서비스 입니다<br/>
+        결정 잘 못하는 이화인들을 위한 맛집 추천 서비스 입니다<br/>
         시작하시려면 아래 버튼을 눌러주세요!
       </Content>
       <StartButton onClick={handleStartButton}>시작하기</StartButton>
@@ -34,7 +34,6 @@ const Wrapper=styled.div`
   align-items:center;
   width:100%;
   height:91vh;
-  //box-shadow : 0rem -1rem 0.4rem 0.4rem rgba(0, 0, 0, 0.1);
   box-shadow:0 0 1rem 0 rgba(0, 0, 0, 0.1);
 `;
 

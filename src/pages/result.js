@@ -109,15 +109,14 @@ export default function Result({history}){
         resultEmpty.success &&
         <Wrapper>
           <Content>그럼 오늘은 <Name>{list.name}</Name> 어때?</Content>
-          <Img src={list.imgURL} />
+          <ImgLink target="blank" href={list.url}><Img src={list.imgURL} /></ImgLink>
           <Detail><i class="fas fa-map-marker-alt"></i> {list.address}</Detail>
           <Row>
-            <Link href={`tel:${list.phone}`}><i class="fas fa-phone-alt"></i> 전화</Link>
-            <Link target="blank" href={list.url}><i class="fas fa-link"></i> 링크</Link>
-          </Row>
-          <ShareButton onClick={handleKakaoShareButton}>
+            <Tel href={`tel:${list.phone}`}><i class="fas fa-phone-alt"></i> 전화</Tel>
+            <ShareButton onClick={handleKakaoShareButton}>
               <KakaoImg src={KAKAO_SHARE_IMG}/> 공유해서 지도보기
-          </ShareButton>
+            </ShareButton>
+          </Row>
           <Detail>대표메뉴 : {list.menuName} {list.price} 원</Detail> 
           <ButtonGroup>
             <Button onClick={handleRestartButton} >다시하기</Button>
@@ -135,6 +134,8 @@ export default function Result({history}){
     </>
   )
 }
+
+const ImgLink=styled.a``;
 
 const KakaoImg=styled.img`
   width:1.5rem;
@@ -165,7 +166,7 @@ const Row=styled.div`
   margin:0.5rem 0;
 `;
 
-const Link=styled.a`
+const Tel=styled.a`
   margin-right:0.2rem;
   text-align:center;
   padding:0.2rem;
@@ -191,6 +192,7 @@ const Wrapper=styled.div`
   width:100%;
   height:90vh;
   padding-top:1rem;
+  box-shadow:0 0 1rem 0 rgba(0, 0, 0, 0.1);
 `;
 
 const Content=styled.h2``;
@@ -200,6 +202,8 @@ const Img=styled.img`
   height:15rem;
   border:none;
   margin:1rem;
+  border-radius:0.5rem;
+  box-shadow:0 0 1rem 0 rgba(0, 0, 0, 0.2);
 `;
 
 const Detail=styled.div`

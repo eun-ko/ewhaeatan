@@ -19,6 +19,7 @@ const Wrapper=styled.div`
   align-items:center;
   width:100%;
   height:90vh;
+  box-shadow:0 0 1rem 0 rgba(0, 0, 0, 0.1);
 `;
 
 const Button=styled.button`

@@ -46,6 +46,7 @@ const Wrapper=styled.div`
   flex-direction:column;
   justify-content:center;
   align-items:center;
+  box-shadow:0 0 1rem 0 rgba(0, 0, 0, 0.1);
 `;
 
 const Question=styled.h2`

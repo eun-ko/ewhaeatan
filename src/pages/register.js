@@ -97,7 +97,8 @@ export default function Register({history}){
   const leftArrowIconStyle={
     display:"flex",
     alignItems:"center",
-    width:"20%"
+    width:"20%",
+    cursor:"pointer"
   }
 
   return(
